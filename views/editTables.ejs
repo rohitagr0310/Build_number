@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit main Details</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 text-white">
+    <div class="container mx-auto py-10">
+      <!-- Header -->
+      <div class="container mx-auto py-10 flex justify-between">
+        <h1 class="text-3xl font-bold mb-6">Edit main Details</h1>
+        <!-- Logout Button -->
+        <!-- <button
+          id="logoutBtn"
+          class="bg-red-500 text-white px-4 py-2 rounded mb-6"
+        >
+          Logout
+        </button> -->
+      </div>
+      <!-- Row 1 -->
+      <div class="flex items-center mb-4 justify-between">
+        <label class="mr-4">Header:</label>
+        <button
+          id="addHeaderBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded ml-4 mr-2"
+        >
+          Add
+        </button>
+        <button
+          id="showHeaderBtn"
+          class="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Show
+        </button>
+      </div>
+
+      <!-- Display Area for Header Details -->
+      <div id="headerDetails" class="hidden">
+        <!-- Header details will be displayed here -->
+      </div>
+
+      <!-- Input fields for adding a new header -->
+      <div id="headerInputFields" class="hidden pt-[2vh] pb-[2vh]">
+        <label for="headerCode" class="mr-2">Code:</label>
+        <input
+          type="text"
+          id="headerCode"
+          placeholder="Enter Header Code"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4" 
+          required
+          maxlength="1"
+          minlength="1" 
+        />
+        <label for="headerDefinition" class="mr-2">Definition:</label>
+        <input
+          type="text"
+          id="headerDefinition"
+          placeholder="Enter Header Definition"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+        />
+        <label for="revisedBy" class="mr-2">Revised By:</label>
+        <input
+          type="text"
+          id="revisedBy"
+          placeholder="Enter Revised By"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+        />
+        <button
+          id="submitHeaderBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Submit
+        </button>
+      </div>
+
+      <!-- Row 2 - Commodity -->
+      <div class="flex items-center mb-4 justify-between">
+        <label class="mr-4">Commodity:</label>
+        <button
+          id="addCommodityBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded ml-[-1vw] mr-2"
+        >
+          Add
+        </button>
+        <button
+          id="showCommodityBtn"
+          class="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Show
+        </button>
+      </div>
+
+      <!-- Display Area for Commodity Details -->
+      <div id="commodityDetails" class="hidden">
+        <!-- Commodity details will be displayed here -->
+      </div>
+
+      <!-- Input fields for adding a new commodity -->
+      <div id="commodityInputFields" class="hidden pt-[2vh] pb-[2vh]">
+        <label for="commodityCode" class="mr-2">Code:</label>
+        <input
+          type="text"
+          id="commodityCode"
+          placeholder="Enter Commodity Code"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+          required
+          maxlength="1"
+          minlength="1" 
+        />
+        <label for="commodityDefinition" class="mr-2">Definition:</label>
+        <input
+          type="text"
+          id="commodityDefinition"
+          placeholder="Enter Commodity Definition"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+        />
+        <label for="commodityRevisedBy" class="mr-2">Revised By:</label>
+        <input
+          type="text"
+          id="commodityRevisedBy"
+          placeholder="Enter Revised By"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+        />
+        <button
+          id="submitCommodityBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Submit
+        </button>
+      </div>
+
+      <!-- Row 3 - Subcommodity -->
+      <div class="flex items-center mb-4 justify-between">
+        <label class="mr-4">Subcommodity:</label>
+        <button
+          id="addSubcommodityBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded ml-[-2.5vw] mr-2"
+        >
+          Add
+        </button>
+        <button
+          id="showSubcommodityBtn"
+          class="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Show
+        </button>
+      </div>
+
+      <div id="subcommoditySearchDetails" class="hidden">
+        <label for="subcommodityCode" class="mr-2">Code:</label>
+        <input
+          type="text"
+          id="subcommoditySearchCode"
+          placeholder="Enter Commodity Code"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+          required
+          maxlength="1"
+          minlength="1" 
+        />
+        <button
+          id="submitSearchSubcommodityBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Submit
+        </button>
+      </div>
+
+      <!-- Display Area for Subcommodity Details -->
+      <div id="subcommodityDetails" class="hidden">
+        <!-- Subcommodity details will be displayed here -->
+      </div>
+
+      <!-- Input fields for adding a new subcommodity -->
+      <div id="subcommodityInputFields" class="hidden">
+        <label for="subcommodityCode" class="mr-2">Code:</label>
+        <input
+          type="text"
+          id="subcommodityCode"
+          placeholder="Enter Subcommodity Code"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+        />
+        <label for="subcommodityDefinition" class="mr-2">Definition:</label>
+        <input
+          type="text"
+          id="subcommodityDefinition"
+          placeholder="Enter Subcommodity Definition"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+        />
+        <label for="subcommodityRevisedBy" class="mr-2">Revised By:</label>
+        <input
+          type="text"
+          id="subcommodityRevisedBy"
+          placeholder="Enter Revised By"
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
+        />
+        <button
+          id="submitSubcommodityBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <script>
+      var toggleheader = true
+      var togglecommodity = true
+      var togglesubCommodity = true
+      document
+        .getElementById("addHeaderBtn")
+        .addEventListener("click", function () {
+          // Show input fields for adding a new header
+          if(toggleheader){
+            document
+            .getElementById("headerInputFields")
+            .classList.remove("hidden");
+            toggleheader = false
+          }
+          else{
+            document
+            .getElementById("headerInputFields")
+            .classList.add("hidden");
+            toggleheader = true
+          }
+        });
+
+      document
+        .getElementById("submitHeaderBtn")
+        .addEventListener("click", function () {
+          
+          const headerCode = document.getElementById("headerCode").value;
+          const headerDefinition =
+            document.getElementById("headerDefinition").value;
+          const revisedBy = document.getElementById("revisedBy").value;
+          const uppercaseRegex = /^[A-Z]$/;
+          if(!uppercaseRegex.test(headerCode)){
+            alert("Please Enter code as upper case")
+            return
+          }
+
+          // Make AJAX request to add header
+          fetch("/createHeader", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              code: headerCode,
+              Definition: headerDefinition,
+              revisedBy: revisedBy,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle response, show success message or error
+              alert(data.status); // You can replace this with your own logic
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error
+            });
+        });
+
+      document
+        .getElementById("showHeaderBtn")
+        .addEventListener("click", function () {
+          // Make AJAX request to get header details
+          fetch("/getheader")
+            .then((response) => response.json())
+            .then((headers) => {
+              const headerDetailsDiv = document.getElementById("headerDetails");
+              headerDetailsDiv.innerHTML = ""; // Clear previous content
+
+              if (headers.length === 0) {
+                headerDetailsDiv.innerText = "No header details available.";
+              } else {
+                headers.forEach((header) => {
+                  const headerInfo = document.createElement("div");
+                  headerInfo.innerText = `Header Code: ${header.code}`;
+                  headerDetailsDiv.appendChild(headerInfo);
+                });
+              }
+
+              // Show header details display area
+              headerDetailsDiv.classList.remove("hidden");
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error
+            });
+        });
+
+      document
+        .getElementById("addCommodityBtn")
+        .addEventListener("click", function () {
+          // Show input fields for adding a new commodity
+          if(togglecommodity){
+            document
+            .getElementById("commodityInputFields")
+            .classList.remove("hidden");
+            togglecommodity = false;
+          }
+          else {
+            document
+            .getElementById("commodityInputFields")
+            .classList.add("hidden");
+            togglecommodity = true;
+          }
+            
+        });
+
+      document
+        .getElementById("submitCommodityBtn")
+        .addEventListener("click", function () {
+          const commodityCode = document.getElementById("commodityCode").value;
+          const commodityDefinition = document.getElementById(
+            "commodityDefinition"
+          ).value;
+          const commodityRevisedBy =
+            document.getElementById("commodityRevisedBy").value;
+
+          console.log(commodityCode, commodityDefinition, commodityRevisedBy);
+          const uppercaseRegex = /^[A-Z]$/;
+          if(!uppercaseRegex.test(commodityCode)){
+            alert("Please Enter code as upper case")
+            return
+          }
+
+          // Make AJAX request to add commodity
+          fetch("/createCommodity", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              code: commodityCode,
+              Definition: commodityDefinition,
+              revisedBy: commodityRevisedBy,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle response, show success message or error
+              alert(data.status); // You can replace this with your own logic
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error
+            });
+        });
+
+      document
+        .getElementById("showCommodityBtn")
+        .addEventListener("click", function () {
+          // Make AJAX request to get commodity details
+          fetch("/getcommodity")
+            .then((response) => response.json())
+            .then((commodities) => {
+              const commodityDetailsDiv =
+                document.getElementById("commodityDetails");
+              commodityDetailsDiv.innerHTML = ""; // Clear previous content
+
+              if (commodities.length === 0) {
+                commodityDetailsDiv.innerText =
+                  "No commodity details available.";
+              } else {
+                const commodityList = document.createElement("ul");
+                commodities.forEach((commodity) => {
+                  const listItem = document.createElement("li");
+                  listItem.innerText = `Code: ${commodity.code}, Definition: ${commodity.Definition}`;
+                  commodityList.appendChild(listItem);
+                });
+                commodityDetailsDiv.appendChild(commodityList);
+              }
+
+              // Show commodity details display area
+              commodityDetailsDiv.classList.remove("hidden");
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error
+            });
+        });
+
+      document
+        .getElementById("addSubcommodityBtn")
+        .addEventListener("click", function () {
+          // Show input fields for adding a new subcommodity
+          if(togglesubCommodity){
+            document
+            .getElementById("subcommodityInputFields")
+            .classList.remove("hidden");
+            togglesubCommodity = false;
+          }
+          else {
+            document
+            .getElementById("subcommodityInputFields")
+            .classList.add("hidden");
+            togglesubCommodity = true;
+          }
+        });
+
+      document
+        .getElementById("submitSubcommodityBtn")
+        .addEventListener("click", function () {
+          const commodityCode =
+            document.getElementById("subcommodityCode").value;
+          const subcommodityDefinition = document.getElementById(
+            "subcommodityDefinition"
+          ).value;
+          const subcommodityRevisedBy = document.getElementById(
+            "subcommodityRevisedBy"
+          ).value;
+
+          console.log(
+            commodityCode,
+            subcommodityDefinition,
+            subcommodityRevisedBy
+          );
+
+          const uppercaseRegex = /^[A-Z]$/;
+          if(!uppercaseRegex.test(commodityCode)){
+            alert("Please Enter code as upper case")
+            return
+          }
+          // Make AJAX request to add subcommodity
+          fetch("/createSubcommodity", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              code: commodityCode,
+              Definition: subcommodityDefinition,
+              revisedBy: subcommodityRevisedBy,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle response, show success message or error
+              alert(data.status); // You can replace this with your own logic
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error
+            });
+        });
+
+      document
+        .getElementById("showSubcommodityBtn")
+        .addEventListener("click", function () {
+          
+        });
+
+      document
+        .getElementById("submitSearchSubcommodityBtn")
+        .addEventListener("click", function () {
+          // Get the subcommodity code from the input field
+          const subcommodityCode = document.getElementById(
+            "subcommoditySearchCode"
+          ).value;
+
+          // Make AJAX request to get subcommodity details
+          fetch("/getsubcommodity", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ code: subcommodityCode }),
+          })
+            .then((response) => response.json())
+            .then((subcommodities) => {
+              // Rest of the code remains the same
+              const subcommodityDetailsDiv = document.getElementById(
+                "subcommodityDetails"
+              );
+              subcommodityDetailsDiv.innerHTML = ""; // Clear previous content
+              if (subcommodities.length === 0) {
+                subcommodityDetailsDiv.innerText =
+                  "No subcommodity details available.";
+              } else {
+                const subcommodityList = document.createElement("ul");
+                subcommodities.forEach((subcommodity) => {
+                  const listItem = document.createElement("li");
+                  listItem.innerText = `Code: ${subcommodity.code}, Definition: ${subcommodity.definition}`;
+                  subcommodityList.appendChild(listItem);
+                });
+                subcommodityDetailsDiv.appendChild(subcommodityList);
+              }
+              // Show subcommodity details display area
+              subcommodityDetailsDiv.classList.remove("hidden");
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error
+            });
+        });
+
+        
+    </script>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Part Number Entries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="relative flex bg-[#F2EDF3]">
+
+    <div class="blend absolute w-screen h-screen bg-black opacity-25 hidden" id="back"></div>
+    
+    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card0">
+        <div class="card-body">
+            <h5 class="card-title mb-[4vh]">Create Header Entry</h5>
+            <form action="/createHeader" method="POST" class="flex flex-col gap-[2vh]">
+                <div class="form-group">
+                    <label for="code">Code:</label>
+                    <input type="text" id="code" name="code" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
+                </div>
+                <div class="form-group">
+                    <label for="Definition">Definition:</label>
+                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
+                </div>
+                <div class="form-group">
+                    <label for="revisedBy">Revised By:</label>
+                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
+                </div>
+                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card1">
+        <div class="card-body">
+            <h5 class="card-title mb-[4vh]">Create Commodity Entry</h5>
+            <form action="/createCommodity" method="POST" class="flex flex-col gap-[2vh]">
+                <div class="form-group">
+                    <label for="code">Code:</label>
+                    <input type="text" id="code" name="code" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
+                </div>
+                <div class="form-group">
+                    <label for="Definition">Definition1:</label>
+                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
+                </div>
+                <div class="form-group">
+                    <label for="revisedBy">Revised By:</label>
+                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
+                </div>
+                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card2">
+        <div class="card-body">
+            <h5 class="card-title mb-[4vh]">Edit SubCommodity Entry</h5>
+            <form action="/createSubCommodity" method="POST" class="flex flex-col gap-[2vh]">
+                <div class="form-group">
+                    <label for="code">B2 Code:</label>
+                    <input type="text" id="code" name="code" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
+                </div>
+                <!-- <div class="form-group">
+                    <label for="Subcommodity">SubCommodity No:</label>
+                    <input type="number" id="subCommodity" name="subCommodity" class="border-2 rounded-sm" required title="Please enter a single uppercase letter" max="100">
+                </div> -->
+                <div class="form-group">
+                    <label for="Definition">Definition:</label>
+                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
+                </div>
+                <div class="form-group">
+                    <label for="revisedBy">Revised By:</label>
+                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
+                </div>
+                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card4">
+        <div class="card-body">
+            <h5 class="card-title mb-[4vh]">Add part Numbers</h5>
+            <form action="/createpartNumber" method="POST" class="flex flex-col gap-[2vh]">
+                <div class="form-group">
+                    <label for="code">B1 Code:</label>
+                    <input type="text" id="code" name="header" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
+                </div>
+                
+                <div class="form-group">
+                    <label for="code">B2 Code:</label>
+                    <input type="text" id="code" name="Commodity" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
+                </div>
+                <div class="form-group">
+                    <label for="index">SubCommodity No:</label>
+                    <input type="number" id="SubCommodity_No" name="subCommodity" class="border-2 rounded-sm" required title="Please enter a single uppercase letter" max="99">
+                </div>
+                <!-- <div class="form-group">
+                    <label for="index">Part No:</label>
+                    <input type="number" id="Part_No" name="Part_No" class="border-2 rounded-sm" required title="Please enter a single uppercase letter" max="999">
+                </div> -->
+                <div class="form-group">
+                    <label for="Definition">Definition:</label>
+                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
+                </div>
+                <div class="form-group">
+                    <label for="revisedBy">Revised By:</label>
+                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
+                </div>
+                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="sidebar w-[20vw] h-[100vh] mt-[1vw] bg-white rounded-tr-lg rounded-br-lg p-[3vw]">
+        <div class="menu flex flex-col gap-[5vh]">
+            <a href="" class="bg-black text-white rounded-lg transition p-[10px]"> Build numbery Entry</a>
+            <a href="/modify:header" class="hover:bg-black hover:text-white hover:rounded-lg transition p-[10px]">Build number Verify</a>
+        </div>
+    </div>
+
+    <div class="main w-[80vw] h-[100vh] m-[1vw] bg-white rounded-lg bg-red-500 flex flex-col justify-center items-center gap-[4vh]">
+        <h1>Part Number Entries</h1>
+        <div class="flex">
+            <% for (let i = 0; i < 10; i++) { %>
+                <div class="input-container flex flex-col gap-[10px]">
+                    <input class="w-[6vh] h-[6vh] m-[1vh] flex justify-center items-center text-center border-[1px] border-black rounded-sm" type="text" name="entry<%= i %>" maxlength="1" value="<%= i+1 %>" onchange="handleInputChange('<%= i %>', this.value.toUpperCase())" id="entries<%= i%>" onkeypress="return /[0-9A-Z]/i.test(event.key)" disabled>
+                    <% if(i == 0 || i == 1 || i == 2 || i == 4){ %>
+                        <button class="text-blue-500" id="write<%= i%>" onclick="{handlewrite('<%= i %>')}">write</button>
+                    <% } %>
+                    <% if(i == 0 || i == 1 || i == 2 || i == 4){ %>
+                    <button class="text-blue-500" id="edit<%= i%>" onclick="{handleedit('<%= i %>')}">edit</button>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+        <button class="bg-[#1ACFB4] w-[10vw] h-[7vh] rounded-lg ">ADD Build Number</button>
+    </div>
+
+    <script>
+        function handleInputChange(index, value) {
+            // Code to handle input change
+            let input =  document.getElementById('entries'+ index)
+            input.value = value
+            input.disabled = true
+        }
+
+        function handlewrite(index){
+            let input =  document.getElementById('entries'+ index)
+            input.disabled = false
+            if(index == 2){
+                let input3 =  document.getElementById('entries'+ 3)
+                input3.disabled = false 
+            }
+            if(index == 4){
+                let input5 =  document.getElementById('entries'+ 5)
+                let input6 =  document.getElementById('entries'+ 6)
+                input5.disabled = false
+                input6.disabled = false
+            }
+        }
+
+        function handleedit(index){
+            let card =  document.getElementById('card'+index)
+            console.log('card'+index)
+            card.classList.remove("hidden");
+            let back =  document.getElementById('back')
+            back.classList.remove("hidden");
+        }
+
+        // function submit(){
+        //     let card =  document.getElementById('card')
+        //     card.classList.add("hidden");
+        //     let back =  document.getElementById('back')
+        //     back.classList.add("hidden")
+        // }
+    </script>
+</body>
+</html>

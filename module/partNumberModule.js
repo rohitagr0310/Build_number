@@ -1,40 +1,42 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const partNumberSchema = mongoose.Schema({
-    code_header: {
-        type: String,
-        required: true,
-        maxlength: 1,
-        minlength: 1,
-        match: /^[A-Z]$/ // Ensures that the code is a single uppercase letter
+  code_header: {
+    type: String,
+    required: true,
+    maxlength: 1,
+    minlength: 1,
+    match: /^[A-Z]$/, // Ensures that the code is a single uppercase letter
+  },
+  code_Commodity: {
+    type: String,
+    required: true,
+    maxlength: 1,
+    minlength: 1,
+    match: /^[A-Z]$/, // Ensures that the code is a single uppercase letter
+  },
+  code_SubCommodity: {
+    type: Number,
+    required: true,
+    maxlength: 2,
+    minlength: 1,
+  },
+  CrossEntry: [
+    {
+      index: Number,
+      Definition: String,
+      revisionNumber: Number,
+      revisedBy: String,
     },
-    code_Commodity: {
-        type: String,
-        required: true,
-        maxlength: 1,
-        minlength: 1,
-        match: /^[A-Z]$/ // Ensures that the code is a single uppercase letter
-    },
-    code_SubCommodity: {
-        type: Number,
-        required: true,
-        maxlength: 2,
-        minlength: 1,
-    },
-    CrossEntry: [{
-        index : Number,
-        Definition: String,
-        revisionNumber: Number,
-        revisedBy: String
-    }]
-})
+  ],
+});
 
-const partNumberCollection = mongoose.model('part_number', partNumberSchema);
+const partNumberCollection = mongoose.model("part_number", partNumberSchema);
 
 module.exports = {
-    partNumberCollection,
-    createEmpty: (fields) => {
-        const partNumber = new partNumberCollection(fields);
-        partNumber.save();
-    }
-}
+  partNumberCollection,
+  createEmpty: (fields) => {
+    const partNumber = new partNumberCollection(fields);
+    partNumber.save();
+  },
+};

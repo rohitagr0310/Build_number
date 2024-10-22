@@ -52,10 +52,10 @@
           type="text"
           id="headerCode"
           placeholder="Enter Header Code"
-          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4" 
+          class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
           required
           maxlength="1"
-          minlength="1" 
+          minlength="1"
         />
         <label for="headerDefinition" class="mr-2">Definition:</label>
         <input
@@ -111,7 +111,7 @@
           class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
           required
           maxlength="1"
-          minlength="1" 
+          minlength="1"
         />
         <label for="commodityDefinition" class="mr-2">Definition:</label>
         <input
@@ -161,7 +161,7 @@
           class="w-32 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white mr-4"
           required
           maxlength="1"
-          minlength="1" 
+          minlength="1"
         />
         <button
           id="submitSearchSubcommodityBtn"
@@ -209,39 +209,37 @@
     </div>
 
     <script>
-      var toggleheader = true
-      var togglecommodity = true
-      var togglesubCommodity = true
+      var toggleheader = true;
+      var togglecommodity = true;
+      var togglesubCommodity = true;
       document
         .getElementById("addHeaderBtn")
         .addEventListener("click", function () {
           // Show input fields for adding a new header
-          if(toggleheader){
+          if (toggleheader) {
             document
-            .getElementById("headerInputFields")
-            .classList.remove("hidden");
-            toggleheader = false
-          }
-          else{
+              .getElementById("headerInputFields")
+              .classList.remove("hidden");
+            toggleheader = false;
+          } else {
             document
-            .getElementById("headerInputFields")
-            .classList.add("hidden");
-            toggleheader = true
+              .getElementById("headerInputFields")
+              .classList.add("hidden");
+            toggleheader = true;
           }
         });
 
       document
         .getElementById("submitHeaderBtn")
         .addEventListener("click", function () {
-          
           const headerCode = document.getElementById("headerCode").value;
           const headerDefinition =
             document.getElementById("headerDefinition").value;
           const revisedBy = document.getElementById("revisedBy").value;
           const uppercaseRegex = /^[A-Z]$/;
-          if(!uppercaseRegex.test(headerCode)){
-            alert("Please Enter code as upper case")
-            return
+          if (!uppercaseRegex.test(headerCode)) {
+            alert("Please Enter code as upper case");
+            return;
           }
 
           // Make AJAX request to add header
@@ -300,19 +298,17 @@
         .getElementById("addCommodityBtn")
         .addEventListener("click", function () {
           // Show input fields for adding a new commodity
-          if(togglecommodity){
+          if (togglecommodity) {
             document
-            .getElementById("commodityInputFields")
-            .classList.remove("hidden");
+              .getElementById("commodityInputFields")
+              .classList.remove("hidden");
             togglecommodity = false;
-          }
-          else {
+          } else {
             document
-            .getElementById("commodityInputFields")
-            .classList.add("hidden");
+              .getElementById("commodityInputFields")
+              .classList.add("hidden");
             togglecommodity = true;
           }
-            
         });
 
       document
@@ -327,9 +323,9 @@
 
           console.log(commodityCode, commodityDefinition, commodityRevisedBy);
           const uppercaseRegex = /^[A-Z]$/;
-          if(!uppercaseRegex.test(commodityCode)){
-            alert("Please Enter code as upper case")
-            return
+          if (!uppercaseRegex.test(commodityCode)) {
+            alert("Please Enter code as upper case");
+            return;
           }
 
           // Make AJAX request to add commodity
@@ -392,16 +388,15 @@
         .getElementById("addSubcommodityBtn")
         .addEventListener("click", function () {
           // Show input fields for adding a new subcommodity
-          if(togglesubCommodity){
+          if (togglesubCommodity) {
             document
-            .getElementById("subcommodityInputFields")
-            .classList.remove("hidden");
+              .getElementById("subcommodityInputFields")
+              .classList.remove("hidden");
             togglesubCommodity = false;
-          }
-          else {
+          } else {
             document
-            .getElementById("subcommodityInputFields")
-            .classList.add("hidden");
+              .getElementById("subcommodityInputFields")
+              .classList.add("hidden");
             togglesubCommodity = true;
           }
         });
@@ -425,9 +420,9 @@
           );
 
           const uppercaseRegex = /^[A-Z]$/;
-          if(!uppercaseRegex.test(commodityCode)){
-            alert("Please Enter code as upper case")
-            return
+          if (!uppercaseRegex.test(commodityCode)) {
+            alert("Please Enter code as upper case");
+            return;
           }
           // Make AJAX request to add subcommodity
           fetch("/createSubcommodity", {
@@ -454,9 +449,7 @@
 
       document
         .getElementById("showSubcommodityBtn")
-        .addEventListener("click", function () {
-          
-        });
+        .addEventListener("click", function () {});
 
       document
         .getElementById("submitSearchSubcommodityBtn")
@@ -501,8 +494,6 @@
               // Handle error
             });
         });
-
-        
     </script>
   </body>
 </html>

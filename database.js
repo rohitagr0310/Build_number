@@ -5,7 +5,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/buildNumber')
 const con = mongoose.connection;
 
 con.on('connected',()=>{
-    console.log("Jai Shree Ram")
+    console.log("Database Connected")
 })
 
 con.on('error',()=>{

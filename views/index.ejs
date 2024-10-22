@@ -1,179 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Part Number Entries</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="relative flex bg-[#F2EDF3]">
-
-    <div class="blend absolute w-screen h-screen bg-black opacity-25 hidden" id="back"></div>
-    
-    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card0">
-        <div class="card-body">
-            <h5 class="card-title mb-[4vh]">Create Header Entry</h5>
-            <form action="/createHeader" method="POST" class="flex flex-col gap-[2vh]">
-                <div class="form-group">
-                    <label for="code">Code:</label>
-                    <input type="text" id="code" name="code" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
-                </div>
-                <div class="form-group">
-                    <label for="Definition">Definition:</label>
-                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
-                </div>
-                <div class="form-group">
-                    <label for="revisedBy">Revised By:</label>
-                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
-                </div>
-                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
-            </form>
+  </head>
+  <body class="bg-gray-900 text-white">
+    <div class="container mx-auto py-10">
+      <div class="flex justify-between items-center mb-6">
+        <!-- Logo or Site Name -->
+        <h1 class="text-3xl font-bold">Tekmedika</h1>
+        <!-- Logout Button -->
+        <!-- <button id="logoutBtn" class="bg-red-500 text-white px-4 py-2 rounded">
+          Logout
+        </button> -->
+      </div>
+      <h1 class="text-3xl font-bold mb-6">Part Entry Page</h1>
+      <!-- Dropdowns -->
+      <div class="flex mb-4">
+        <!-- Dropdown 1 -->
+        <div class="mr-4">
+          <label for="header" class="block font-semibold mb-1">Header</label>
+          <select
+            id="header"
+            name="header"
+            class="w-56 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
+          >
+            <option value="">Select</option>
+            <!-- Options will be populated dynamically here -->
+          </select>
         </div>
-    </div>
-
-
-    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card1">
-        <div class="card-body">
-            <h5 class="card-title mb-[4vh]">Create Commodity Entry</h5>
-            <form action="/createCommodity" method="POST" class="flex flex-col gap-[2vh]">
-                <div class="form-group">
-                    <label for="code">Code:</label>
-                    <input type="text" id="code" name="code" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
-                </div>
-                <div class="form-group">
-                    <label for="Definition">Definition1:</label>
-                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
-                </div>
-                <div class="form-group">
-                    <label for="revisedBy">Revised By:</label>
-                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
-                </div>
-                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
-            </form>
+        <!-- Dropdown 2 -->
+        <div class="mr-4">
+          <label for="commodity" class="block font-semibold mb-1"
+            >Commodity</label
+          >
+          <select
+            id="commodity"
+            name="commodity"
+            class="w-56 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
+          >
+            <option value="">Select</option>
+            <!-- Default option -->
+            <!-- Options will be populated dynamically here -->
+          </select>
         </div>
-    </div>
-
-    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card2">
-        <div class="card-body">
-            <h5 class="card-title mb-[4vh]">Edit SubCommodity Entry</h5>
-            <form action="/createSubCommodity" method="POST" class="flex flex-col gap-[2vh]">
-                <div class="form-group">
-                    <label for="code">B2 Code:</label>
-                    <input type="text" id="code" name="code" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
-                </div>
-                <!-- <div class="form-group">
-                    <label for="Subcommodity">SubCommodity No:</label>
-                    <input type="number" id="subCommodity" name="subCommodity" class="border-2 rounded-sm" required title="Please enter a single uppercase letter" max="100">
-                </div> -->
-                <div class="form-group">
-                    <label for="Definition">Definition:</label>
-                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
-                </div>
-                <div class="form-group">
-                    <label for="revisedBy">Revised By:</label>
-                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
-                </div>
-                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
-            </form>
+        <!-- Dropdown 3 -->
+        <div class="mr-4" id="subcommodityDropdownDiv">
+          <label for="subcommodity" class="block font-semibold mb-1"
+            >Sub Commodity</label
+          >
+          <select
+            id="subcommodity"
+            name="subcommodity"
+            class="w-56 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
+          >
+            <option value="">Select</option>
+            <!-- Default option -->
+            <!-- Sub commodity options will be populated dynamically here -->
+          </select>
         </div>
-    </div>
+        <p class="text-white text-[2vw] flex items-center ml-[3vw]" id="Partno"> RAM</p>
+      </div>
+      <!-- Description Field -->
+      <div class="mb-4">
+        <label for="description" class="block font-semibold mb-1"
+          >Description</label
+        >
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          class="w-full p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
+        ></textarea>
+      </div>
+      <!-- Buttons -->
+      <div class="flex">
+        <button
+          id="addPartBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+        >
+          Add Part
+        </button>
+        <button
+          id="editPartBtn"
+          class="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Edit Part
+        </button>
+      </div>
 
-    <div class="card absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-white p-[2vw] hidden" id="card4">
-        <div class="card-body">
-            <h5 class="card-title mb-[4vh]">Add part Numbers</h5>
-            <form action="/createpartNumber" method="POST" class="flex flex-col gap-[2vh]">
-                <div class="form-group">
-                    <label for="code">B1 Code:</label>
-                    <input type="text" id="code" name="header" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
-                </div>
-                
-                <div class="form-group">
-                    <label for="code">B2 Code:</label>
-                    <input type="text" id="code" name="Commodity" class="border-2 rounded-sm" required maxlength="1" minlength="1" pattern="[A-Z]" title="Please enter a single uppercase letter">
-                </div>
-                <div class="form-group">
-                    <label for="index">SubCommodity No:</label>
-                    <input type="number" id="SubCommodity_No" name="subCommodity" class="border-2 rounded-sm" required title="Please enter a single uppercase letter" max="99">
-                </div>
-                <!-- <div class="form-group">
-                    <label for="index">Part No:</label>
-                    <input type="number" id="Part_No" name="Part_No" class="border-2 rounded-sm" required title="Please enter a single uppercase letter" max="999">
-                </div> -->
-                <div class="form-group">
-                    <label for="Definition">Definition:</label>
-                    <input type="text" id="Definition" name="Definition" class="border-2 rounded-sm" title="Please enter a Definition">
-                </div>
-                <div class="form-group">
-                    <label for="revisedBy">Revised By:</label>
-                    <input type="text" id="revisedBy" name="revisedBy" class="border-2 rounded-sm" required>
-                </div>
-                <button type="submit" class="text-white bg-black p-[1vh] rounded-md">Submit</button>
-            </form>
-        </div>
+      <!-- Input field for part number -->
+      <div id="partInput" style="display: none" class="mt-4">
+        <label for="partNumber" class="block font-semibold mb-1"
+          >Part Number (001-999)</label
+        >
+        <input
+          type="number"
+          min="1"
+          max="999"
+          id="partNumber"
+          name="partNumber"
+          class="w-56 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
+        />
+        <button
+          id="submitPartBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+        >
+          Submit
+        </button>
+      </div>
     </div>
-    
-    <div class="sidebar w-[20vw] h-[100vh] mt-[1vw] bg-white rounded-tr-lg rounded-br-lg p-[3vw]">
-        <div class="menu flex flex-col gap-[5vh]">
-            <a href="" class="bg-black text-white rounded-lg transition p-[10px]"> Build numbery Entry</a>
-            <a href="/modify:header" class="hover:bg-black hover:text-white hover:rounded-lg transition p-[10px]">Build number Verify</a>
-        </div>
-    </div>
-
-    <div class="main w-[80vw] h-[100vh] m-[1vw] bg-white rounded-lg bg-red-500 flex flex-col justify-center items-center gap-[4vh]">
-        <h1>Part Number Entries</h1>
-        <div class="flex">
-            <% for (let i = 0; i < 10; i++) { %>
-                <div class="input-container flex flex-col gap-[10px]">
-                    <input class="w-[6vh] h-[6vh] m-[1vh] flex justify-center items-center text-center border-[1px] border-black rounded-sm" type="text" name="entry<%= i %>" maxlength="1" value="<%= i+1 %>" onchange="handleInputChange('<%= i %>', this.value.toUpperCase())" id="entries<%= i%>" onkeypress="return /[0-9A-Z]/i.test(event.key)" disabled>
-                    <% if(i == 0 || i == 1 || i == 2 || i == 4){ %>
-                        <button class="text-blue-500" id="write<%= i%>" onclick="{handlewrite('<%= i %>')}">write</button>
-                    <% } %>
-                    <% if(i == 0 || i == 1 || i == 2 || i == 4){ %>
-                    <button class="text-blue-500" id="edit<%= i%>" onclick="{handleedit('<%= i %>')}">edit</button>
-                    <% } %>
-                </div>
-            <% } %>
-        </div>
-        <button class="bg-[#1ACFB4] w-[10vw] h-[7vh] rounded-lg ">ADD Build Number</button>
-    </div>
-
     <script>
-        function handleInputChange(index, value) {
-            // Code to handle input change
-            let input =  document.getElementById('entries'+ index)
-            input.value = value
-            input.disabled = true
-        }
+      // Fetch data for headers
+      fetch("/getheader")
+        .then((response) => response.json())
+        .then((headers) => {
+          const headerDropdown = document.getElementById("header");
+          headers.forEach((header) => {
+            const option = document.createElement("option");
+            option.text = header.Definition;
+            option.value = header.code; // Change to the appropriate property for definition
+            headerDropdown.add(option);
+          });
+        });
 
-        function handlewrite(index){
-            let input =  document.getElementById('entries'+ index)
-            input.disabled = false
-            if(index == 2){
-                let input3 =  document.getElementById('entries'+ 3)
-                input3.disabled = false 
-            }
-            if(index == 4){
-                let input5 =  document.getElementById('entries'+ 5)
-                let input6 =  document.getElementById('entries'+ 6)
-                input5.disabled = false
-                input6.disabled = false
-            }
-        }
+      // Fetch data for commodities
+      fetch("/getcommodity")
+        .then((response) => response.json())
+        .then((commodities) => {
+          const commodityDropdown = document.getElementById("commodity");
+          commodities.forEach((commodity) => {
+            const option = document.createElement("option");
+            option.text = commodity.Definition;
+            option.value = commodity.code; // Change to the appropriate property for definition
+            commodityDropdown.add(option);
+          });
+        });
 
-        function handleedit(index){
-            let card =  document.getElementById('card'+index)
-            console.log('card'+index)
-            card.classList.remove("hidden");
-            let back =  document.getElementById('back')
-            back.classList.remove("hidden");
-        }
+      // Handle commodity selection to populate subcommodity dropdown
+      document
+        .getElementById("commodity")
+        .addEventListener("change", function () {
+          const commodityCode = this.value;
+          fetch("/getsubcommodity", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ code: commodityCode }),
+          })
+            .then((response) => response.json())
+            .then((subcommodities) => {
+              const subcommodityDropdown =
+                document.getElementById("subcommodity");
+              subcommodityDropdown.innerHTML = ""; // Clear existing options
+              subcommodities.forEach((subcommodity) => {
+                const option = document.createElement("option");
+                option.text = subcommodity.Definition;
+                option.value = subcommodity.index; // Change to the appropriate property for definition
+                subcommodityDropdown.add(option);
+              });
+            });
+        });
 
-        // function submit(){
-        //     let card =  document.getElementById('card')
-        //     card.classList.add("hidden");
-        //     let back =  document.getElementById('back')
-        //     back.classList.add("hidden")
-        // }
+      // Add click event listeners for buttons
+      // Function to toggle visibility of part input field
+      function togglePartInputVisibility(visible) {
+        document.getElementById("partInput").style.display = visible
+          ? "block"
+          : "none";
+      }
+
+      // Add click event listener for "Edit Part" button
+      document
+        .getElementById("editPartBtn")
+        .addEventListener("click", function () {
+          // Toggle visibility of part input field
+          togglePartInputVisibility(true);
+        });
+
+      document.getElementById("partNumber").onkeypress = function (e) {
+        var ev = e || window.event;
+        if (ev.charCode < 48 || ev.charCode > 57) {
+          return false;
+        } else if (this.value * 10 + ev.charCode - 48 > this.max) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+
+      // Add click event listener for "Submit" button in part input field
+      document
+        .getElementById("submitPartBtn")
+        .addEventListener("click", function () {
+          // Get values of header, commodity, subcommodity, and part number
+          const header = document.getElementById("header").value;
+          const commodity = document.getElementById("commodity").value;
+          const subcommodity = document.getElementById("subcommodity").value;
+          const partNumber = document.getElementById("partNumber").value;
+          const description = document.getElementById("description").value;
+
+          // Send data to the server
+          fetch("/createpartNumber", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              header: header,
+              Commodity: commodity,
+              subCommodity: subcommodity,
+              Part_No: partNumber,
+              Definition: description,
+            }),
+          })
+            .then((response) => {
+              if (response.status) {
+                response.json().then(data => {
+                alert(data.status);
+                console.log(data.serial_No.serial_No)
+                document.getElementById("Partno").innerHTML = data.serial_No.serial_No
+               });
+                console.log("Part number submitted successfully");
+                // Add your code to handle success, e.g., show a success message to the user
+              } else {
+                console.error("Failed to submit part number");
+                // Add your code to handle failure, e.g., show an error message to the user
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Add your code to handle errors, e.g., show an error message to the user
+            });
+
+          // Toggle visibility of part input field
+          togglePartInputVisibility(false);
+        });
+
+      // Add click event listener for "Add Part" button
+      document
+        .getElementById("addPartBtn")
+        .addEventListener("click", function () {
+          // Get values of header, commodity, subcommodity
+          const header = document.getElementById("header").value;
+          const commodity = document.getElementById("commodity").value;
+          const subcommodity = document.getElementById("subcommodity").value;
+          const description = document.getElementById("description").value;
+
+          console.log(
+            "Add Part button clicked with data:",
+            header,
+            commodity,
+            subcommodity,
+            description
+          );
+          // Add your code to send data to the server without part number
+
+          fetch("/createpartNumber", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              header: header,
+              Commodity: commodity,
+              subCommodity: subcommodity,
+              Definition: description,
+            }),
+          })
+            .then((response) => {
+              if (response.status) {
+                response.json().then(data => {
+                alert(data.status);
+                console.log(data.serial_No.serial_No)
+                document.getElementById("Partno").innerHTML = data.serial_No.serial_No
+               });
+                console.log("Part number submitted successfully");
+                // Add your code to handle success, e.g., show a success message to the user
+              } else {
+                console.error("Failed to submit part number");
+                // Add your code to handle failure, e.g., show an error message to the user
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Add your code to handle errors, e.g., show an error message to the user
+            });
+        });
     </script>
-</body>
+  </body>
 </html>

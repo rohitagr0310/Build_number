@@ -12,8 +12,12 @@ app.use(express.json());
 
 app.set("view engine", "ejs");
 
-app.get('/partNumber',function(req, res){
+app.get('/', function (req, res) {
     res.render("index")
+});
+
+app.get('/editTables', (req, res) => {
+    res.render("editTables")
 })
 
 app.post('/createHeader',headercontroller.addHeader)
@@ -21,13 +25,6 @@ app.post('/createCommodity',commodityController.addcommodity)
 app.post('/createSubCommodity',subCommodityController.addSubCommodity)
 app.post('/createpartNumber',partNumberController.addPartNumber)
 
-app.get('/', function (req, res) {
-    res.render("partNumber")
-});
-
-app.get('/editTables', (req, res) => {
-    res.render("editTables")
-})
 
 app.get('/getheader', headercontroller.getHeaderDetails);
 app.get('/getcommodity', commodityController.getCommodityDetails);

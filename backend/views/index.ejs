@@ -13,17 +13,12 @@
   <body class="bg-gray-900 text-white">
     <div class="container mx-auto py-10">
       <div class="flex justify-between items-center mb-6">
-        <!-- Logo or Site Name -->
         <h1 class="text-3xl font-bold">Tekmedika</h1>
-        <!-- Logout Button -->
-        <!-- <button id="logoutBtn" class="bg-red-500 text-white px-4 py-2 rounded">
-          Logout
-        </button> -->
       </div>
       <h1 class="text-3xl font-bold mb-6">Part Entry Page</h1>
+
       <!-- Dropdowns -->
       <div class="flex mb-4">
-        <!-- Dropdown 1 -->
         <div class="mr-4">
           <label for="header" class="block font-semibold mb-1">Header</label>
           <select
@@ -32,10 +27,8 @@
             class="w-56 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
           >
             <option value="">Select</option>
-            <!-- Options will be populated dynamically here -->
           </select>
         </div>
-        <!-- Dropdown 2 -->
         <div class="mr-4">
           <label for="commodity" class="block font-semibold mb-1"
             >Commodity</label
@@ -46,12 +39,9 @@
             class="w-56 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
           >
             <option value="">Select</option>
-            <!-- Default option -->
-            <!-- Options will be populated dynamically here -->
           </select>
         </div>
-        <!-- Dropdown 3 -->
-        <div class="mr-4" id="subcommodityDropdownDiv">
+        <div class="mr-4">
           <label for="subcommodity" class="block font-semibold mb-1"
             >Sub Commodity</label
           >
@@ -61,12 +51,13 @@
             class="w-56 p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
           >
             <option value="">Select</option>
-            <!-- Default option -->
-            <!-- Sub commodity options will be populated dynamically here -->
           </select>
         </div>
-        <p class="text-white text-[2vw] flex items-center ml-[3vw]" id="Partno"> RAM</p>
+        <p class="text-white text-[2vw] flex items-center ml-[3vw]" id="Partno">
+          RAM
+        </p>
       </div>
+
       <!-- Description Field -->
       <div class="mb-4">
         <label for="description" class="block font-semibold mb-1"
@@ -79,6 +70,7 @@
           class="w-full p-2 border rounded focus:outline-none focus:border-blue-500 bg-gray-800 text-white"
         ></textarea>
       </div>
+
       <!-- Buttons -->
       <div class="flex">
         <button
@@ -95,6 +87,7 @@
         </button>
       </div>
 
+      <!-- Input field for part number -->
       <!-- Input field for part number -->
       <div id="partInput" style="display: none" class="mt-4">
         <label for="partNumber" class="block font-semibold mb-1"
@@ -115,8 +108,35 @@
           Submit
         </button>
       </div>
+
+      <!-- Cart Table -->
+      <h2 class="text-2xl font-bold mt-6 mb-4">Cart</h2>
+      <table class="min-w-full border-collapse border border-gray-600">
+        <thead>
+          <tr>
+            <th class="border border-gray-600 px-4 py-2">Part Number</th>
+            <th class="border border-gray-600 px-4 py-2">Header</th>
+            <th class="border border-gray-600 px-4 py-2">Commodity</th>
+            <th class="border border-gray-600 px-4 py-2">Sub Commodity</th>
+            <th class="border border-gray-600 px-4 py-2">Description</th>
+            <th class="border border-gray-600 px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="cartBody"></tbody>
+      </table>
+
+      <button
+        id="submitAllBtn"
+        class="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+      >
+        Submit All Parts
+      </button>
     </div>
+
     <script>
+      // Cart array to store added parts
+      let cart = [];
+
       // Fetch data for headers
       fetch("/getheader")
         .then((response) => response.json())
@@ -196,103 +216,128 @@
         }
       };
 
-      // Add click event listener for "Submit" button in part input field
+      // Function to update the cart display
+      function updateCart() {
+        const cartBody = document.getElementById("cartBody");
+        cartBody.innerHTML = ""; // Clear existing cart display
+
+        cart.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="border border-gray-600 px-4 py-2">${item.partNumber}</td>
+            <td class="border border-gray-600 px-4 py-2">${item.header}</td>
+            <td class="border border-gray-600 px-4 py-2">${item.commodity}</td>
+            <td class="border border-gray-600 px-4 py-2">${item.subcommodity}</td>
+            <td class="border border-gray-600 px-4 py-2">${item.description}</td>
+            <td class="border border-gray-600 px-4 py-2">
+              <button class="bg-red-500 text-white px-2 py-1 rounded removeBtn" data-index="${index}">Remove</button>
+            </td>
+          `;
+          cartBody.appendChild(row);
+        });
+
+        // Add remove functionality to each button
+        const removeButtons = document.querySelectorAll(".removeBtn");
+        removeButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const index = this.getAttribute("data-index");
+            cart.splice(index, 1); // Remove item from cart
+            updateCart(); // Refresh cart display
+          });
+        });
+      }
+
+      // Add click event listener for "Add Part" button
+      document
+        .getElementById("addPartBtn")
+        .addEventListener("click", function () {
+          const header = document.getElementById("header").value;
+          const commodity = document.getElementById("commodity").value;
+          const subcommodity = document.getElementById("subcommodity").value;
+          const description = document.getElementById("description").value;
+
+          // Add a new part with "New Part" part number
+          cart.push({
+            partNumber: "New Part",
+            header,
+            commodity,
+            subcommodity,
+            description,
+          });
+
+          updateCart(); // Update the cart display
+        });
+
       document
         .getElementById("submitPartBtn")
         .addEventListener("click", function () {
-          // Get values of header, commodity, subcommodity, and part number
           const header = document.getElementById("header").value;
           const commodity = document.getElementById("commodity").value;
           const subcommodity = document.getElementById("subcommodity").value;
           const partNumber = document.getElementById("partNumber").value;
           const description = document.getElementById("description").value;
 
-          // Send data to the server
-          fetch("/createpartNumber", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              header: header,
-              Commodity: commodity,
-              subCommodity: subcommodity,
-              Part_No: partNumber,
-              Definition: description,
-            }),
-          })
-            .then((response) => {
-              if (response.status) {
-                response.json().then(data => {
-                alert(data.status);
-                console.log(data.serial_No.serial_No)
-                document.getElementById("Partno").innerHTML = data.serial_No.serial_No
-               });
-                console.log("Part number submitted successfully");
-                // Add your code to handle success, e.g., show a success message to the user
-              } else {
-                console.error("Failed to submit part number");
-                // Add your code to handle failure, e.g., show an error message to the user
-              }
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              // Add your code to handle errors, e.g., show an error message to the user
-            });
-
-          // Toggle visibility of part input field
-          togglePartInputVisibility(false);
-        });
-
-      // Add click event listener for "Add Part" button
-      document
-        .getElementById("addPartBtn")
-        .addEventListener("click", function () {
-          // Get values of header, commodity, subcommodity
-          const header = document.getElementById("header").value;
-          const commodity = document.getElementById("commodity").value;
-          const subcommodity = document.getElementById("subcommodity").value;
-          const description = document.getElementById("description").value;
-
-          console.log(
-            "Add Part button clicked with data:",
+          cart.push({
+            partNumber,
             header,
             commodity,
             subcommodity,
-            description
-          );
-          // Add your code to send data to the server without part number
+            description,
+          });
 
-          fetch("/createpartNumber", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              header: header,
-              Commodity: commodity,
-              subCommodity: subcommodity,
-              Definition: description,
-            }),
-          })
-            .then((response) => {
-              if (response.status) {
-                response.json().then(data => {
-                alert(data.status);
-                console.log(data.serial_No.serial_No)
-                document.getElementById("Partno").innerHTML = data.serial_No.serial_No
-               });
-                console.log("Part number submitted successfully");
-                // Add your code to handle success, e.g., show a success message to the user
+          updateCart(); // Update the cart display
+        });
+
+      document
+        .getElementById("submitAllBtn")
+        .addEventListener("click", async function () {
+          // Disable the button to prevent multiple submissions
+          this.disabled = true;
+          this.innerText = "Submitting...";
+
+          for (let i = 0; i < cart.length; i++) {
+            const part = cart[i];
+
+            // Create the payload for each part
+            const payload = {
+              header: part.header,
+              Commodity: part.commodity,
+              subCommodity: part.subcommodity,
+              Part_No: part.partNumber || null, // Assign part number if provided, else null
+              Definition: part.description,
+            };
+
+            try {
+              // Send the request for each part in the cart
+              const response = await fetch("/createpartNumber", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+              });
+
+              const data = await response.json();
+              if (
+                data.status === "New Part Added" ||
+                data.status === "Updated a part and made a new entry"
+              ) {
+                console.log(`Part submitted successfully: ${data.serial_No}`);
               } else {
-                console.error("Failed to submit part number");
-                // Add your code to handle failure, e.g., show an error message to the user
+                console.error(`Failed to submit part: ${data.status}`);
               }
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              // Add your code to handle errors, e.g., show an error message to the user
-            });
+            } catch (error) {
+              console.error("Error submitting part:", error);
+            }
+          }
+
+          // Reset button text and re-enable after submission is complete
+          this.disabled = false;
+          this.innerText = "Submit All Parts";
+
+          // Clear cart after successful submission
+          cart = [];
+          updateCart(); // Refresh the cart display
         });
     </script>
   </body>

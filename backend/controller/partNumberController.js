@@ -51,12 +51,10 @@ module.exports = {
                   slave.CrossEntry.push(CrossEntry);
                   slave.save();
                   console.log("CrossEntry updated or added successfully");
-                  return res
-                    .status(200)
-                    .send({
-                      status: "Updated a part and make a new entry",
-                      serial_No: serial_No,
-                    });
+                  return res.status(200).send({
+                    status: "Updated a part and make a new entry",
+                    serial_No: serial_No,
+                  });
                 });
             });
           } else if (Part_No > -1) {

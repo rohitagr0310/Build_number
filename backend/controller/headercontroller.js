@@ -27,7 +27,11 @@ module.exports = {
     headerModule.headerCollection
       .find({})
       .then((headers) => {
-        res.send(headers);
+        if (headers && headers.length > 0) {
+          res.send(headers);
+        } else {
+          res.status(404).send({ error: "No Header found" });
+        }
       })
       .catch((error) => {
         console.error("Error fetching header details:", error);

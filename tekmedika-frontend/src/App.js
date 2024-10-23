@@ -1,9 +1,16 @@
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import PartEntryPage from "./Pages/PartEntryPage";
 
 function App() {
   return (
     <div className="App">
-      hello world
+      <Router>
+        <Routes>
+          <Route path="/" element={<PartEntryPage />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

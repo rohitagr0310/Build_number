@@ -16,29 +16,37 @@ const PartEntry = () => {
 
   const [partInputVisible, setPartInputVisible] = useState(false);
 
+  // Function to get token from localStorage
+  const getToken = () => localStorage.getItem("token");
+
   useEffect(() => {
-    // Fetch headers from Express backend on port 8000
-    fetch("http://103.159.68.52:8000/getheader")
+    fetch("http://103.159.68.52:8000/api/getheader", {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
-        // Map the headers to extract the necessary fields
         setHeaders(
           data.map((header) => ({
             value: header.code,
-            label: header.code, // Display the Definition as label
+            label: header.code,
           }))
         );
       })
       .catch((error) => console.error("Error fetching headers:", error));
 
-    // Fetch commodities from Express backend
-    fetch("http://103.159.68.52:8000/getcommodity")
+    fetch("http://103.159.68.52:8000/api/getcommodity", {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setCommodities(
           data.map((commodity) => ({
             value: commodity.code,
-            label: commodity.code, // Adjust according to the returned structure
+            label: commodity.code,
           }))
         );
       })
@@ -46,14 +54,14 @@ const PartEntry = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch subcommodities based on selected commodity
     if (commodity) {
-      fetch(`http://103.159.68.52:8000/getsubcommodity`, {
+      fetch("http://103.159.68.52:8000/api/getsubcommodity", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
-        body: JSON.stringify({ code: commodity }), // Sending commodity code in the body
+        body: JSON.stringify({ code: commodity }),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -94,7 +102,7 @@ const PartEntry = () => {
       description,
     };
     setCart([...cart, newPart]);
-    setPartInputVisible(false); // Hide part number input after submission
+    setPartInputVisible(false);
   };
 
   const submitAllParts = async () => {
@@ -109,11 +117,12 @@ const PartEntry = () => {
 
       try {
         const response = await fetch(
-          "http://103.159.68.52:8000/createpartNumber",
+          "http://103.159.68.52:8000/api/createpartNumber",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${getToken()}`,
             },
             body: JSON.stringify(payload),
           }
@@ -124,7 +133,7 @@ const PartEntry = () => {
         console.error("Error submitting part:", error);
       }
     }
-    setCart([]); // Clear the cart after submission
+    setCart([]);
   };
 
   return (
@@ -148,7 +157,7 @@ const PartEntry = () => {
           value={subcommodity}
           setValue={setSubcommodity}
           options={subcommodities}
-          disabled={!commodity} // Disable subcommodity dropdown if no commodity is selected
+          disabled={!commodity}
         />
       </div>
 

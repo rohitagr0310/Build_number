@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null);
@@ -6,7 +6,16 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if token exists in localStorage on initial load
+    if (token) {
+      setIsAuthenticated(true);
+    }
+    setLoading(false); // Set loading to false after checking token
+  }, [token]);
 
   // Login function
   const login = async (credentials) => {
@@ -86,7 +95,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, token, login, signup, logout }}
+      value={{ isAuthenticated, token, loading, login, signup, logout }}
     >
       {children}
     </AuthContext.Provider>

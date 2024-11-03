@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Dashboard from "./layouts/Dashboard";
 import PartList from "./pages/PartList";
 import PartEntry from "./pages/PartEntry";
@@ -17,10 +18,11 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route
             path="/"
             element={
@@ -35,8 +37,8 @@ const App = () => {
             <Route path="edit-table" element={<EditTable />} />
           </Route>
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 

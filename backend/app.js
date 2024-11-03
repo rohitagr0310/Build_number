@@ -1,24 +1,26 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 
 const db = require("./database");
 const router = require("./router/Routes");
+const authMiddleware = require("./middleware/auth");
 
 const app = express();
+
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.use("/", router);
+// Protected routes
+app.use("/api", authMiddleware, router);
 
-app.set("view engine", "ejs");
-
-app.get("/", function (req, res) {
-  res.render("index");
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!" });
 });
 
-app.get("/editTables", (req, res) => {
-  res.render("editTables");
-});
-
-app.listen(8000, () => console.log("Port 8000 is started"));
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import CartTable from "../Components/CartTable";
-import Dropdowns from "../Components/Dropdowns";
+import CartTable from "../components/CartTable";
+import Dropdowns from "../components/Dropdowns";
 
-const PartEntryPage = () => {
+const PartEntry = () => {
   const [cart, setCart] = useState([]);
   const [header, setHeader] = useState("");
   const [commodity, setCommodity] = useState("");
@@ -25,7 +25,7 @@ const PartEntryPage = () => {
         setHeaders(
           data.map((header) => ({
             value: header.code,
-            label: header.Definition, // Display the Definition as label
+            label: header.code, // Display the Definition as label
           }))
         );
       })
@@ -37,8 +37,8 @@ const PartEntryPage = () => {
       .then((data) => {
         setCommodities(
           data.map((commodity) => ({
-            value: commodity._id,
-            label: commodity.Definition, // Adjust according to the returned structure
+            value: commodity.code,
+            label: commodity.code, // Adjust according to the returned structure
           }))
         );
       })
@@ -48,13 +48,19 @@ const PartEntryPage = () => {
   useEffect(() => {
     // Fetch subcommodities based on selected commodity
     if (commodity) {
-      fetch(`http://103.159.68.52:8000/getsubcommodity?commodity=${commodity}`)
+      fetch(`http://103.159.68.52:8000/getsubcommodity`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code: commodity }), // Sending commodity code in the body
+      })
         .then((response) => response.json())
         .then((data) => {
           setSubcommodities(
             data.map((subcommodity) => ({
-              value: subcommodity._id,
-              label: subcommodity.Definition, // Adjust according to the returned structure
+              value: subcommodity.index,
+              label: subcommodity.index,
             }))
           );
         })
@@ -198,4 +204,4 @@ const PartEntryPage = () => {
   );
 };
 
-export default PartEntryPage;
+export default PartEntry;

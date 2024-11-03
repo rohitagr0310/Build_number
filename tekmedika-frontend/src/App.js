@@ -1,18 +1,43 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
-import PartEntryPage from "./Pages/PartEntryPage";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Dashboard from "./layouts/Dashboard";
+import PartList from "./pages/PartList";
+import PartEntry from "./pages/PartEntry";
+import EditTable from "./pages/EditTable";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
-function App() {
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
+
+const App = () => {
   return (
-    <div className="App">
-      <Router>
+    <AuthProvider>
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<PartEntryPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Navigate to="/parts" />} />
+            <Route path="parts" element={<PartList />} />
+            <Route path="part-entry" element={<PartEntry />} />
+            <Route path="edit-table" element={<EditTable />} />
+          </Route>
         </Routes>
-      </Router>
-    </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
-}
+};
 
 export default App;

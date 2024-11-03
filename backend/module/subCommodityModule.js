@@ -13,6 +13,7 @@ const subcommoditySchema = mongoose.Schema({
       index: Number,
       Definition: String,
       revisedBy: String,
+      revisionDate: Date,
     },
   ],
 });

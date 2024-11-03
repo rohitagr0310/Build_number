@@ -1,6 +1,6 @@
 const partNumberModule = require("../module/partNumberModule");
 const partSlave = require("../module/partSlave");
-const BOMContoller = require("./BOMContoller");
+const BOMContoller = require("./BOMController");
 
 module.exports = {
   addPartNumber: (req, res) => {

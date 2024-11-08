@@ -101,7 +101,7 @@ const PartEntry = () => {
   const handleSubcommodityChange = (selectedSubcommodity) => {
     setSubcommodity(selectedSubcommodity);
     const selected = subcommodities.find(
-      (item) => item.value === selectedSubcommodity
+      (item) => item.value === Number(selectedSubcommodity)
     );
     setSubcommodityDefinition(selected ? selected.definition : "");
   };
@@ -197,9 +197,9 @@ const PartEntry = () => {
           options={subcommodities}
           disabled={!commodity}
         />
-        {subcommodityDefinition && (
-          <p className="text-gray-400 mt-1">{subcommodityDefinition}</p>
-        )}
+        <p className="text-gray-400 mt-1">{subcommodityDefinition}</p>
+        {/* {subcommodityDefinition && (
+        )} */}
       </div>
 
       <label className="block font-semibold mb-1">Description</label>

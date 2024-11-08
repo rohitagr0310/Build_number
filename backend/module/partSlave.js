@@ -18,15 +18,23 @@ const partNumberSchema = mongoose.Schema({
   code_SubCommodity: {
     type: Number,
     required: true,
-    maxlength: 2,
-    minlength: 1,
+    min: 1, // Minimum allowed value
+    max: 99, // Maximum allowed value
   },
   CrossEntry: [
     {
       index: Number,
-      Definition: String,
-      revisionNumber: Number,
-      revisedBy: String,
+      revisions: [
+        {
+          revisionNumber: Number,
+          revisedBy: String,
+          Definition: String,
+          revisedDate: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
     },
   ],
 });
@@ -37,6 +45,6 @@ module.exports = {
   partNumberCollection,
   Addpart: (fields) => {
     const partNumber = new partNumberCollection(fields);
-    partNumber.save();
+    return partNumber.save();
   },
 };

@@ -10,6 +10,7 @@ router.post("/createHeader", headercontroller.addHeader);
 router.post("/createCommodity", commodityController.addcommodity);
 router.post("/createSubCommodity", subCommodityController.addSubCommodity);
 router.post("/createpartNumber", partNumberController.addPartNumber);
+router.get("/getpartNumber", partNumberController.getAllPartNumbers);
 
 router.get("/getheader", headercontroller.getHeaderDetails);
 router.get("/getcommodity", commodityController.getCommodityDetails);

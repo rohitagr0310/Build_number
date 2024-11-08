@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
     setLoading(false); // Set loading to false after checking token
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   // Login function

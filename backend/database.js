@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(
-  "mongodb://rohit:rohit@127.0.0.1:27017/buildNumber?authSource=admin"
+  "mongodb://Rohit.Agrawal:Rohitagr2610@127.0.0.1:27017/buildNumber?authSource=admin"
 );
 
 const con = mongoose.connection;

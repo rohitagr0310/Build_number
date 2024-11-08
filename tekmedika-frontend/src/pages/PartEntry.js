@@ -14,9 +14,12 @@ const PartEntry = () => {
   const [commodities, setCommodities] = useState([]);
   const [subcommodities, setSubcommodities] = useState([]);
 
+  const [headerDefinition, setHeaderDefinition] = useState("");
+  const [commodityDefinition, setCommodityDefinition] = useState("");
+  const [subcommodityDefinition, setSubcommodityDefinition] = useState("");
+
   const [partInputVisible, setPartInputVisible] = useState(false);
 
-  // Function to get token from localStorage
   const getToken = () => localStorage.getItem("token");
 
   useEffect(() => {
@@ -31,6 +34,7 @@ const PartEntry = () => {
           data.map((header) => ({
             value: header.code,
             label: header.code,
+            definition: header.Definition,
           }))
         );
       })
@@ -47,6 +51,7 @@ const PartEntry = () => {
           data.map((commodity) => ({
             value: commodity.code,
             label: commodity.code,
+            definition: commodity.Definition,
           }))
         );
       })
@@ -69,6 +74,7 @@ const PartEntry = () => {
             data.map((subcommodity) => ({
               value: subcommodity.index,
               label: subcommodity.index,
+              definition: subcommodity.Definition,
             }))
           );
         })
@@ -77,6 +83,28 @@ const PartEntry = () => {
         );
     }
   }, [commodity]);
+
+  const handleHeaderChange = (selectedHeader) => {
+    setHeader(selectedHeader);
+    const selected = headers.find((item) => item.value === selectedHeader);
+    setHeaderDefinition(selected ? selected.definition : "");
+  };
+
+  const handleCommodityChange = (selectedCommodity) => {
+    setCommodity(selectedCommodity);
+    const selected = commodities.find(
+      (item) => item.value === selectedCommodity
+    );
+    setCommodityDefinition(selected ? selected.definition : "");
+  };
+
+  const handleSubcommodityChange = (selectedSubcommodity) => {
+    setSubcommodity(selectedSubcommodity);
+    const selected = subcommodities.find(
+      (item) => item.value === selectedSubcommodity
+    );
+    setSubcommodityDefinition(selected ? selected.definition : "");
+  };
 
   const addPart = () => {
     const newPart = {
@@ -143,24 +171,38 @@ const PartEntry = () => {
         <Dropdowns
           label="Header"
           value={header}
-          setValue={setHeader}
+          setValue={handleHeaderChange}
           options={headers}
         />
+        {headerDefinition && (
+          <p className="text-gray-400 mt-1">{headerDefinition}</p>
+        )}
+      </div>
+      <div className="flex mb-4">
         <Dropdowns
           label="Commodity"
           value={commodity}
-          setValue={setCommodity}
+          setValue={handleCommodityChange}
           options={commodities}
         />
+        {commodityDefinition && (
+          <p className="text-gray-400 mt-1">{commodityDefinition}</p>
+        )}
+      </div>
+      <div className="flex mb-4">
         <Dropdowns
           label="Sub Commodity"
           value={subcommodity}
-          setValue={setSubcommodity}
+          setValue={handleSubcommodityChange}
           options={subcommodities}
           disabled={!commodity}
         />
+        {subcommodityDefinition && (
+          <p className="text-gray-400 mt-1">{subcommodityDefinition}</p>
+        )}
       </div>
 
+      <label className="block font-semibold mb-1">Description</label>
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}

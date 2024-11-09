@@ -18,7 +18,7 @@ const partNumberSchema = mongoose.Schema({
   code_SubCommodity: {
     type: Number,
     required: true,
-    min: 1, // Minimum allowed value
+    min: 0, // Minimum allowed value
     max: 99, // Maximum allowed value
   },
   CrossEntry: [

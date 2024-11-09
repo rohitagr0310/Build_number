@@ -58,7 +58,6 @@ module.exports = {
                 });
             });
           } else if (Part_No > -1) {
-            console.log("ram");
             return res.status(200).send({ status: "Part no. doesn't exist" });
           } else {
             // Adding new CrossEntry

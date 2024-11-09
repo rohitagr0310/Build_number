@@ -35,26 +35,42 @@ module.exports = {
                 partNumberContent.revisedBy;
               data.save();
               // Adding to Slave Collection
-              const CrossEntry = {
-                index: data.CrossEntry[Part_No - 1].index,
+              const revision = {
                 Definition: partNumberContent.Definition,
                 revisionNumber: data.CrossEntry[Part_No - 1].revisionNumber, // New revision number
                 revisedBy: partNumberContent.revisedBy,
               };
               partSlave.partNumberCollection
-                .findOne({
-                  code_header: header,
-                  code_Commodity: Commodity,
-                  code_SubCommodity: SubCommodity,
+                .updateOne(
+                  {
+                    code_header: header,
+                    code_Commodity: Commodity,
+                    code_SubCommodity: SubCommodity,
+                    "CrossEntry.index": data.CrossEntry[Part_No - 1].index,
+                  },
+                  {
+                    $push: { "CrossEntry.$.revisions": revision }, // Use $push to add the revision to the matched CrossEntry element
+                  }
+                )
+                .then((result) => {
+                  if (result.modifiedCount > 0) {
+                    console.log("Revision updated or added successfully");
+                    return res.status(200).send({
+                      status: "Updated a part and made a new entry",
+                      serial_No: serial_No,
+                    });
+                  } else {
+                    // Handle case where the document or CrossEntry is not found
+                    return res
+                      .status(404)
+                      .send({ status: "CrossEntry not found" });
+                  }
                 })
-                .then((slave) => {
-                  slave.CrossEntry.push(CrossEntry);
-                  slave.save();
-                  console.log("CrossEntry updated or added successfully");
-                  return res.status(200).send({
-                    status: "Updated a part and made a new entry",
-                    serial_No: serial_No,
-                  });
+                .catch((err) => {
+                  console.error("Error updating document:", err);
+                  return res
+                    .status(500)
+                    .send({ status: "Internal Server Error" });
                 });
             });
           } else if (Part_No > -1) {

@@ -3,7 +3,9 @@ import React from "react";
 const Dropdowns = ({ label, value, setValue, options, disabled }) => {
   return (
     <div className="mr-4">
-      <label className="block font-semibold mb-1">{label}</label>
+      <label className="block font-semibold mb-1">
+        {label} <span className="text-red-500">*</span>
+      </label>
       <select
         value={value}
         onChange={(e) => setValue(e.target.value)}

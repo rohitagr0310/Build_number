@@ -102,6 +102,10 @@ const PartEntry = () => {
   };
 
   const addPart = () => {
+    if (!header || !commodity || !subcommodity || !description) {
+      alert("Please fill in all required fields before adding a part.");
+      return;
+    }
     const newPart = {
       partNumber: "New Part",
       header,
@@ -117,6 +121,10 @@ const PartEntry = () => {
   };
 
   const submitPartHandler = () => {
+    if (!header || !commodity || !subcommodity || !description || !partNumber) {
+      alert("Please fill in all required fields before submitting the part.");
+      return;
+    }
     const newPart = {
       partNumber,
       header,
@@ -130,9 +138,9 @@ const PartEntry = () => {
 
   const submitAllParts = async () => {
     const newSnackbars = [];
-
     const token = localStorage.getItem("token");
     const decoded = jwtDecode(token);
+
     for (let part of cart) {
       const payload = {
         header: part.header,
@@ -140,7 +148,7 @@ const PartEntry = () => {
         subCommodity: part.subcommodity,
         Part_No: part.partNumber || null,
         Definition: part.description,
-        revisedBy: decoded.username, // Add the revisedBy field (replace "userName" with the actual user info)
+        revisedBy: decoded.username,
       };
 
       try {
@@ -168,6 +176,7 @@ const PartEntry = () => {
   return (
     <div className="container mx-auto py-10 text-white">
       <h1 className="text-3xl font-bold mb-6">Part Entry Page</h1>
+
       <div className="flex mb-4">
         <Dropdowns
           label="Header"
@@ -179,6 +188,7 @@ const PartEntry = () => {
           <p className="text-gray-400 mt-1">{headerDefinition}</p>
         )}
       </div>
+
       <div className="flex mb-4">
         <Dropdowns
           label="Commodity"
@@ -190,6 +200,7 @@ const PartEntry = () => {
           <p className="text-gray-400 mt-1">{commodityDefinition}</p>
         )}
       </div>
+
       <div className="flex mb-4">
         <Dropdowns
           label="Sub Commodity"
@@ -198,10 +209,14 @@ const PartEntry = () => {
           options={subcommodities}
           disabled={!commodity}
         />
-        <p className="text-gray-400 mt-1">{subcommodityDefinition}</p>
+        {subcommodityDefinition && (
+          <p className="text-gray-400 mt-1">{subcommodityDefinition}</p>
+        )}
       </div>
 
-      <label className="block font-semibold mb-1">Description</label>
+      <label className="block font-semibold mb-1">
+        Description <span className="text-red-500">*</span>
+      </label>
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
@@ -226,7 +241,7 @@ const PartEntry = () => {
       {partInputVisible && (
         <div className="mt-4">
           <label htmlFor="partNumber" className="block font-semibold mb-1">
-            Part Number (001-999)
+            Part Number (001-999) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -264,20 +279,15 @@ const PartEntry = () => {
             message={snackbar.message}
             sx={{
               backgroundColor:
-                snackbar.severity === "success" ? "lightgreen" : "#ffcccb",
-              color: "black",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "16px",
+                snackbar.severity === "success" ? "green" : "red",
             }}
             action={
               <Button
-                color="secondary"
+                color="inherit"
                 size="small"
                 onClick={() => handleCloseSnackbar(index)}
               >
-                <CloseIcon fontSize="small" />
+                <CloseIcon />
               </Button>
             }
           />

@@ -93,6 +93,17 @@ module.exports = {
                 revisedBy: partNumberContent.revisedBy,
               };
 
+              const CrossEntrySlave = {
+                index: data.CrossEntry.length + 1,
+                revisions: [
+                  {
+                    Definition: partNumberContent.Definition,
+                    revisionNumber: 0,
+                    revisedBy: partNumberContent.revisedBy,
+                  },
+                ],
+              };
+
               data.CrossEntry.push(CrossEntry);
               data.save();
 
@@ -105,7 +116,8 @@ module.exports = {
                 })
                 .then((slave) => {
                   if (slave) {
-                    slave.CrossEntry.push(CrossEntry);
+                    console.log(CrossEntrySlave);
+                    slave.CrossEntry.push(CrossEntrySlave);
                     slave.save();
                     return res.send({
                       status: "Added a new part",
@@ -131,8 +143,26 @@ module.exports = {
               },
             ],
           };
+
+          const newEntrySlave = {
+            code_header: header,
+            code_Commodity: Commodity,
+            code_SubCommodity: SubCommodity,
+            CrossEntry: [
+              {
+                index: 1,
+                revisions: [
+                  {
+                    Definition: partNumberContent.Definition,
+                    revisionNumber: 0, // Start with revision number 0
+                    revisedBy: partNumberContent.revisedBy,
+                  },
+                ],
+              },
+            ],
+          };
           partNumberModule.createEmpty(newEntry);
-          partSlave.Addpart(newEntry);
+          partSlave.Addpart(newEntrySlave);
           const field = {
             header: header,
             Commodity: Commodity,

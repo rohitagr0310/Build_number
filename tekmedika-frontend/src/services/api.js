@@ -63,3 +63,15 @@ export const submitPart = async (payload) => {
     throw error;
   }
 };
+
+export const fetchAllPartNumbers = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}getpartNumber`, {
+      headers: getAuthHeaders(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all part numbers:", error);
+    throw error;
+  }
+};

@@ -8,6 +8,7 @@ import {
   fetchSubcommodities,
   submitPart,
 } from "../services/api";
+import { fetchCartItems, addItemToCart, clearCart } from "../services/cartApi";
 import CartTable from "../components/CartTable";
 import Dropdowns from "../components/Dropdowns";
 
@@ -56,7 +57,21 @@ const PartEntry = () => {
         console.error("Error fetching headers or commodities:", error);
       }
     };
+
+    const loadCart = async () => {
+      try {
+        const cartItems = await fetchCartItems();
+
+        // Assuming fetchCartItems returns the full cart object
+        const items = cartItems.items || []; // Extract items from the response
+        setCart(items); // Set the cart state with the items
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
     fetchData();
+    loadCart();
   }, []);
 
   useEffect(() => {
@@ -101,7 +116,7 @@ const PartEntry = () => {
     setSubcommodityDefinition(selected ? selected.definition : "");
   };
 
-  const addPart = () => {
+  const addPart = async () => {
     if (!header || !commodity || !subcommodity || !description) {
       alert("Please fill in all required fields before adding a part.");
       return;
@@ -113,14 +128,20 @@ const PartEntry = () => {
       subcommodity,
       description,
     };
-    setCart([...cart, newPart]);
+
+    try {
+      await addItemToCart(newPart);
+      setCart([...cart, newPart]);
+    } catch (error) {
+      console.error("Error adding part:", error);
+    }
   };
 
   const editPart = () => {
     setPartInputVisible(true);
   };
 
-  const submitPartHandler = () => {
+  const submitPartHandler = async () => {
     if (!header || !commodity || !subcommodity || !description || !partNumber) {
       alert("Please fill in all required fields before submitting the part.");
       return;
@@ -132,8 +153,14 @@ const PartEntry = () => {
       subcommodity,
       description,
     };
-    setCart([...cart, newPart]);
-    setPartInputVisible(false);
+
+    try {
+      const addedPart = addItemToCart(newPart);
+      setCart([...cart, addedPart]);
+      setPartInputVisible(false);
+    } catch (error) {
+      console.error("Error updating part:", error);
+    }
   };
 
   const submitAllParts = async () => {
@@ -165,8 +192,27 @@ const PartEntry = () => {
         });
       }
     }
+
+    await clearCart();
     setSnackbars(newSnackbars);
     setCart([]);
+  };
+
+  const clearCartHandler = async () => {
+    try {
+      await clearCart();
+      setCart([]);
+      setSnackbars([
+        ...snackbars,
+        { message: "Cart cleared successfully!", severity: "success" },
+      ]);
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      setSnackbars([
+        ...snackbars,
+        { message: "Failed to clear cart.", severity: "error" },
+      ]);
+    }
   };
 
   const handleCloseSnackbar = (index) => {
@@ -266,11 +312,18 @@ const PartEntry = () => {
         onClick={submitAllParts}
         variant="contained"
         color="primary"
-        sx={{ mt: 4 }}
+        sx={{ mt: 4, mr: 2 }}
       >
         Submit All Parts
       </Button>
-
+      <Button
+        onClick={clearCartHandler}
+        variant="contained"
+        color="secondary"
+        sx={{ mt: 4 }}
+      >
+        Clear Cart
+      </Button>
       {/* Stack to display multiple SnackbarContents */}
       <Stack spacing={2} sx={{ maxWidth: 600, mt: 4 }}>
         {snackbars.map((snackbar, index) => (

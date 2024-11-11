@@ -5,6 +5,7 @@ require("dotenv").config();
 const db = require("./database");
 const appRoutes = require("./router/Routes");
 const authRoutes = require("./router/authRoutes");
+const cartRouter = require("./router/cartRouter");
 
 const authMiddleware = require("./middleware/auth");
 
@@ -17,6 +18,7 @@ app.use(cors());
 
 // Protected routes
 app.use("/api", authMiddleware, appRoutes);
+app.use("/api/cart", authMiddleware, cartRouter);
 app.use("/auth", authRoutes);
 
 // Error handling middleware

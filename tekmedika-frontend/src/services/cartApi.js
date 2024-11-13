@@ -58,8 +58,12 @@ export const editCartItem = async (itemId, updatedData) => {
 // Remove an item from the cart
 export const removeCartItem = async (itemId) => {
   try {
-    const response = await axios.delete(`${apiUrl}remove/${itemId}`, {
-      headers: getAuthHeaders(),
+    const data = { itemId: itemId };
+    const response = await axios.post(`${apiUrl}remove/`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
+      },
     });
     return response.data;
   } catch (error) {

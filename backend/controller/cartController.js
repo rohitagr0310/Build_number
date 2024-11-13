@@ -49,7 +49,6 @@ module.exports = {
         description,
       });
 
-      console.log(cart);
       await cart.save();
       res.status(200).json(cart);
     } catch (error) {
@@ -103,7 +102,7 @@ module.exports = {
   // Remove item from cart
   removeItem: async (req, res) => {
     try {
-      const { itemId } = req.params;
+      const { itemId } = req.body;
 
       if (!itemId) {
         return res.status(400).json({ message: "Item ID is required" });
@@ -111,9 +110,18 @@ module.exports = {
 
       const cart = await cartCollection.findOne({ userId: req.user.userId });
 
-      const item = cart.items.id(itemId);
-      if (item) {
-        item.remove();
+      if (!cart) {
+        return res.status(404).json({ message: "Cart not found" });
+      }
+
+      // Find the index of the item with the specified ID
+      const itemIndex = cart.items.findIndex(
+        (item) => item._id.toString() === itemId
+      );
+
+      if (itemIndex !== -1) {
+        // Remove the item at the found index
+        cart.items.splice(itemIndex, 1);
         await cart.save();
         res.status(200).json(cart);
       } else {

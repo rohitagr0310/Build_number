@@ -155,8 +155,8 @@ const PartEntry = () => {
     };
 
     try {
-      const addedPart = addItemToCart(newPart);
-      setCart([...cart, addedPart]);
+      addItemToCart(newPart);
+      setCart([...cart, newPart]);
       setPartInputVisible(false);
     } catch (error) {
       console.error("Error updating part:", error);
@@ -307,7 +307,14 @@ const PartEntry = () => {
         </div>
       )}
 
-      <CartTable cart={cart} setCart={setCart} />
+      <CartTable
+        cart={cart}
+        setCart={setCart}
+        headers={headers}
+        commodities={commodities}
+        subcommodities={subcommodities}
+      />
+
       <Button
         onClick={submitAllParts}
         variant="contained"

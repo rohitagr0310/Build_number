@@ -1,4 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { Button, Stack, SnackbarContent } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  fetchHeaders,
+  fetchCommodities,
+  fetchSubcommodities,
+  submitPart,
+} from "../services/api";
+import { fetchCartItems, addItemToCart, clearCart } from "../services/cartApi";
 import CartTable from "../components/CartTable";
 import Dropdowns from "../components/Dropdowns";
 
@@ -14,71 +24,103 @@ const PartEntry = () => {
   const [commodities, setCommodities] = useState([]);
   const [subcommodities, setSubcommodities] = useState([]);
 
+  const [headerDefinition, setHeaderDefinition] = useState("");
+  const [commodityDefinition, setCommodityDefinition] = useState("");
+  const [subcommodityDefinition, setSubcommodityDefinition] = useState("");
+
   const [partInputVisible, setPartInputVisible] = useState(false);
 
-  // Function to get token from localStorage
-  const getToken = () => localStorage.getItem("token");
+  // Snackbar messages array
+  const [snackbars, setSnackbars] = useState([]);
 
   useEffect(() => {
-    fetch("http://103.159.68.52:8000/api/getheader", {
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const headerData = await fetchHeaders();
         setHeaders(
-          data.map((header) => ({
+          headerData.map((header) => ({
             value: header.code,
             label: header.code,
+            definition: header.Definition,
           }))
         );
-      })
-      .catch((error) => console.error("Error fetching headers:", error));
 
-    fetch("http://103.159.68.52:8000/api/getcommodity", {
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
+        const commodityData = await fetchCommodities();
         setCommodities(
-          data.map((commodity) => ({
+          commodityData.map((commodity) => ({
             value: commodity.code,
             label: commodity.code,
+            definition: commodity.Definition,
           }))
         );
-      })
-      .catch((error) => console.error("Error fetching commodities:", error));
+      } catch (error) {
+        console.error("Error fetching headers or commodities:", error);
+      }
+    };
+
+    const loadCart = async () => {
+      try {
+        const cartItems = await fetchCartItems();
+
+        // Assuming fetchCartItems returns the full cart object
+        const items = cartItems.items || []; // Extract items from the response
+        setCart(items); // Set the cart state with the items
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
+    fetchData();
+    loadCart();
   }, []);
 
   useEffect(() => {
-    if (commodity) {
-      fetch("http://103.159.68.52:8000/api/getsubcommodity", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getToken()}`,
-        },
-        body: JSON.stringify({ code: commodity }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
+    const fetchSubData = async () => {
+      if (commodity) {
+        try {
+          const subcommodityData = await fetchSubcommodities(commodity);
           setSubcommodities(
-            data.map((subcommodity) => ({
+            subcommodityData.map((subcommodity) => ({
               value: subcommodity.index,
               label: subcommodity.index,
+              definition: subcommodity.Definition,
             }))
           );
-        })
-        .catch((error) =>
-          console.error("Error fetching subcommodities:", error)
-        );
-    }
+        } catch (error) {
+          console.error("Error fetching subcommodities:", error);
+        }
+      }
+    };
+    fetchSubData();
   }, [commodity]);
 
-  const addPart = () => {
+  const handleHeaderChange = (selectedHeader) => {
+    setHeader(selectedHeader);
+    const selected = headers.find((item) => item.value === selectedHeader);
+    setHeaderDefinition(selected ? selected.definition : "");
+  };
+
+  const handleCommodityChange = (selectedCommodity) => {
+    setCommodity(selectedCommodity);
+    const selected = commodities.find(
+      (item) => item.value === selectedCommodity
+    );
+    setCommodityDefinition(selected ? selected.definition : "");
+  };
+
+  const handleSubcommodityChange = (selectedSubcommodity) => {
+    setSubcommodity(selectedSubcommodity);
+    const selected = subcommodities.find(
+      (item) => item.value === Number(selectedSubcommodity)
+    );
+    setSubcommodityDefinition(selected ? selected.definition : "");
+  };
+
+  const addPart = async () => {
+    if (!header || !commodity || !subcommodity || !description) {
+      alert("Please fill in all required fields before adding a part.");
+      return;
+    }
     const newPart = {
       partNumber: "New Part",
       header,
@@ -86,14 +128,24 @@ const PartEntry = () => {
       subcommodity,
       description,
     };
-    setCart([...cart, newPart]);
+
+    try {
+      await addItemToCart(newPart);
+      setCart([...cart, newPart]);
+    } catch (error) {
+      console.error("Error adding part:", error);
+    }
   };
 
   const editPart = () => {
     setPartInputVisible(true);
   };
 
-  const submitPart = () => {
+  const submitPartHandler = async () => {
+    if (!header || !commodity || !subcommodity || !description || !partNumber) {
+      alert("Please fill in all required fields before submitting the part.");
+      return;
+    }
     const newPart = {
       partNumber,
       header,
@@ -101,11 +153,21 @@ const PartEntry = () => {
       subcommodity,
       description,
     };
-    setCart([...cart, newPart]);
-    setPartInputVisible(false);
+
+    try {
+      addItemToCart(newPart);
+      setCart([...cart, newPart]);
+      setPartInputVisible(false);
+    } catch (error) {
+      console.error("Error updating part:", error);
+    }
   };
 
   const submitAllParts = async () => {
+    const newSnackbars = [];
+    const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+
     for (let part of cart) {
       const payload = {
         header: part.header,
@@ -113,54 +175,94 @@ const PartEntry = () => {
         subCommodity: part.subcommodity,
         Part_No: part.partNumber || null,
         Definition: part.description,
+        revisedBy: decoded.username,
       };
 
       try {
-        const response = await fetch(
-          "http://103.159.68.52:8000/api/createpartNumber",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${getToken()}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
-        const data = await response.json();
-        console.log(data.status);
+        await submitPart(payload);
+        newSnackbars.push({
+          message: `Part ${part.partNumber} submitted successfully!`,
+          severity: "success",
+        });
       } catch (error) {
         console.error("Error submitting part:", error);
+        newSnackbars.push({
+          message: `Failed to submit Part ${part.partNumber}.`,
+          severity: "error",
+        });
       }
     }
+
+    await clearCart();
+    setSnackbars(newSnackbars);
     setCart([]);
+  };
+
+  const clearCartHandler = async () => {
+    try {
+      await clearCart();
+      setCart([]);
+      setSnackbars([
+        ...snackbars,
+        { message: "Cart cleared successfully!", severity: "success" },
+      ]);
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      setSnackbars([
+        ...snackbars,
+        { message: "Failed to clear cart.", severity: "error" },
+      ]);
+    }
+  };
+
+  const handleCloseSnackbar = (index) => {
+    setSnackbars(snackbars.filter((_, i) => i !== index));
   };
 
   return (
     <div className="container mx-auto py-10 text-white">
       <h1 className="text-3xl font-bold mb-6">Part Entry Page</h1>
+
       <div className="flex mb-4">
         <Dropdowns
           label="Header"
           value={header}
-          setValue={setHeader}
+          setValue={handleHeaderChange}
           options={headers}
         />
+        {headerDefinition && (
+          <p className="text-gray-400 mt-1">{headerDefinition}</p>
+        )}
+      </div>
+
+      <div className="flex mb-4">
         <Dropdowns
           label="Commodity"
           value={commodity}
-          setValue={setCommodity}
+          setValue={handleCommodityChange}
           options={commodities}
         />
+        {commodityDefinition && (
+          <p className="text-gray-400 mt-1">{commodityDefinition}</p>
+        )}
+      </div>
+
+      <div className="flex mb-4">
         <Dropdowns
           label="Sub Commodity"
           value={subcommodity}
-          setValue={setSubcommodity}
+          setValue={handleSubcommodityChange}
           options={subcommodities}
           disabled={!commodity}
         />
+        {subcommodityDefinition && (
+          <p className="text-gray-400 mt-1">{subcommodityDefinition}</p>
+        )}
       </div>
 
+      <label className="block font-semibold mb-1">
+        Description <span className="text-red-500">*</span>
+      </label>
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
@@ -169,21 +271,23 @@ const PartEntry = () => {
       />
 
       <div className="flex mb-4">
-        <button
+        <Button
           onClick={addPart}
-          className="bg-blue-500 px-4 py-2 rounded mr-2"
+          variant="contained"
+          color="primary"
+          sx={{ mr: 2 }}
         >
           Add Part
-        </button>
-        <button onClick={editPart} className="bg-green-500 px-4 py-2 rounded">
+        </Button>
+        <Button onClick={editPart} variant="contained" color="secondary">
           Edit Part
-        </button>
+        </Button>
       </div>
 
       {partInputVisible && (
         <div className="mt-4">
           <label htmlFor="partNumber" className="block font-semibold mb-1">
-            Part Number (001-999)
+            Part Number (001-999) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -193,22 +297,62 @@ const PartEntry = () => {
             onChange={(e) => setPartNumber(e.target.value)}
             className="w-56 p-2 border rounded bg-gray-800 text-white mb-4"
           />
-          <button
-            onClick={submitPart}
-            className="bg-blue-500 px-4 py-2 rounded"
+          <Button
+            onClick={submitPartHandler}
+            variant="contained"
+            color="primary"
           >
             Submit
-          </button>
+          </Button>
         </div>
       )}
 
-      <CartTable cart={cart} setCart={setCart} />
-      <button
+      <CartTable
+        cart={cart}
+        setCart={setCart}
+        headers={headers}
+        commodities={commodities}
+        subcommodities={subcommodities}
+      />
+
+      <Button
         onClick={submitAllParts}
-        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 4, mr: 2 }}
       >
         Submit All Parts
-      </button>
+      </Button>
+      <Button
+        onClick={clearCartHandler}
+        variant="contained"
+        color="secondary"
+        sx={{ mt: 4 }}
+      >
+        Clear Cart
+      </Button>
+      {/* Stack to display multiple SnackbarContents */}
+      <Stack spacing={2} sx={{ maxWidth: 600, mt: 4 }}>
+        {snackbars.map((snackbar, index) => (
+          <SnackbarContent
+            key={index}
+            message={snackbar.message}
+            sx={{
+              backgroundColor:
+                snackbar.severity === "success" ? "green" : "red",
+            }}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={() => handleCloseSnackbar(index)}
+              >
+                <CloseIcon />
+              </Button>
+            }
+          />
+        ))}
+      </Stack>
     </div>
   );
 };

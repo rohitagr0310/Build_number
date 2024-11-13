@@ -1,20 +1,36 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Function to check if token is expired
+  const isTokenExpired = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      return decoded.exp * 1000 < Date.now(); // Check if token expiration time is in the past
+    } catch (error) {
+      return true; // If token decoding fails, assume it's invalid
+    }
+  };
+
   useEffect(() => {
-    // Check if token exists in localStorage on initial load
+    // Check token validity on initial load
     if (token) {
-      setIsAuthenticated(true);
+      if (isTokenExpired(token)) {
+        logout(); // Logout if token is expired
+      } else {
+        setIsAuthenticated(true);
+      }
     }
     setLoading(false); // Set loading to false after checking token
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   // Login function

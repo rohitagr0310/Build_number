@@ -180,10 +180,17 @@ const PartEntry = () => {
 
       try {
         await submitPart(payload);
-        newSnackbars.push({
-          message: `Part ${part.partNumber} submitted successfully!`,
-          severity: "success",
-        });
+        if (part.partNumber) {
+          newSnackbars.push({
+            message: `Part ${part.partNumber} with Header - ${part.header}\nCommodity - ${part.commodity}\nSubCommodity - ${part.subcommodity} Has Updated successfully!`,
+            severity: "success",
+          });
+        } else {
+          newSnackbars.push({
+            message: `Part ${part.partNumber} with Header - ${part.header}\nCommodity - ${part.commodity}\nSubCommodity - ${part.subcommodity} Has Submitted successfully!`,
+            severity: "success",
+          });
+        }
       } catch (error) {
         console.error("Error submitting part:", error);
         newSnackbars.push({

@@ -37,10 +37,11 @@ const CartTable = ({ cart, setCart, headers, commodities }) => {
 
   const handleSaveClick = async (index) => {
     try {
+      console.log(cart[index]._id);
       const updatedCartFromAPI = await editCartItem(
         cart[index]._id,
         editedItem
-      ); // Assuming each cart item has a unique `id`
+      );
       const updatedCart = cart.map((item, i) =>
         i === index
           ? updatedCartFromAPI.items.find(

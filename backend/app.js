@@ -20,7 +20,7 @@ app.use(cors());
 // Protected routes
 app.use("/api", authMiddleware, appRoutes);
 app.use("/api/cart", authMiddleware, cartRoutes);
-app.use("/api/subassemblies", BOMRoutes);
+app.use("/api/subassemblies", authMiddleware, BOMRoutes);
 app.use("/auth", authRoutes);
 
 // Error handling middleware

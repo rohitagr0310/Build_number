@@ -7,8 +7,8 @@ import {
   fetchCommodities,
   fetchSubcommodities,
   submitPart,
-} from "../services/api";
-import { fetchCartItems, addItemToCart, clearCart } from "../services/cartApi";
+} from "../services/BaseAPI";
+import { fetchCartItems, addItemToCart, clearCart } from "../services/CartApi";
 import CartTable from "../components/CartTable";
 import Dropdowns from "../components/Dropdowns";
 

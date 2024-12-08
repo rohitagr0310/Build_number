@@ -7,6 +7,7 @@ import PartList from "./pages/PartList";
 import PartEntry from "./pages/PartEntry";
 import EditTable from "./pages/EditTable";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import BOMCreation from "./pages/BOMCreation";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="parts" element={<PartList />} />
             <Route path="part-entry" element={<PartEntry />} />
             <Route path="edit-table" element={<EditTable />} />
+            <Route path="bom" element={<BOMCreation />} />
           </Route>
         </Routes>
       </AuthProvider>

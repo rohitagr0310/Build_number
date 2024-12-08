@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllPartNumbers } from "../services/api"; // Assuming your API functions are in a file named api.js
+import { fetchAllPartNumbers } from "../services/BaseAPI"; // Assuming your API functions are in a file named api.js
 
 const PartList = () => {
   const [partNumbers, setPartNumbers] = useState([]);

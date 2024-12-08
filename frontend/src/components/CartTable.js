@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Dropdowns from "./Dropdowns";
-import { editCartItem, removeCartItem } from "../services/cartApi";
-import { fetchSubcommodities } from "../services/api";
+import { editCartItem, removeCartItem } from "../services/CartApi";
+import { fetchSubcommodities } from "../services/BaseAPI";
 const CartTable = ({ cart, setCart, headers, commodities }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [editedItem, setEditedItem] = useState(null);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Dropdowns from "./Dropdowns";
-import { editCartItem, removeCartItem } from "../services/cartApi";
-import { fetchSubcommodities } from "../services/api";
+import { editCartItem, removeCartItem } from "../services/CartApi";
+import { fetchSubcommodities } from "../services/BaseAPI";
 const CartTable = ({ cart, setCart, headers, commodities }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [editedItem, setEditedItem] = useState(null);
@@ -37,10 +37,11 @@ const CartTable = ({ cart, setCart, headers, commodities }) => {
 
   const handleSaveClick = async (index) => {
     try {
+      console.log(cart[index]._id);
       const updatedCartFromAPI = await editCartItem(
         cart[index]._id,
         editedItem
-      ); // Assuming each cart item has a unique `id`
+      );
       const updatedCart = cart.map((item, i) =>
         i === index
           ? updatedCartFromAPI.items.find(

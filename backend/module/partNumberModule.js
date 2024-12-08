@@ -35,8 +35,4 @@ const partNumberCollection = mongoose.model("part_number", partNumberSchema);
 
 module.exports = {
   partNumberCollection,
-  createEmpty: (fields) => {
-    const partNumber = new partNumberCollection(fields);
-    partNumber.save();
-  },
 };

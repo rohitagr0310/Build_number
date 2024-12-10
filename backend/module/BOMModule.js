@@ -42,7 +42,7 @@ const createSubassembly = (fields) => {
   return subassembly.save();
 };
 
-const subassemblyCollection = mongoose.model("subassembly", subassemblySchema);
+const subassemblyCollection = mongoose.model("boms", subassemblySchema);
 
 module.exports = {
   subassemblyCollection,

@@ -39,10 +39,12 @@ const partNumberSchema = mongoose.Schema({
       lastIssued: {
         type: Date,
         required: false,
+        default: null,
       },
       lastRefilled: {
         type: Date,
         required: false,
+        default: null,
       },
     },
   ],

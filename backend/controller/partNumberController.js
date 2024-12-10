@@ -1,6 +1,8 @@
 const partNumberModule = require("../module/partNumberModule");
 const partSlave = require("../module/partSlave");
+
 module.exports = {
+  // Add or update a part number
   addPartNumber: async (req, res) => {
     try {
       const partNumberContent = req.body;
@@ -8,6 +10,7 @@ module.exports = {
       const header = partNumberContent.header;
       const Commodity = partNumberContent.Commodity;
       const Part_No = parseInt(partNumberContent.Part_No);
+      const name = partNumberContent.name; // Add name field from request body
 
       const data = await partNumberModule.partNumberCollection.findOne({
         code_header: header,
@@ -26,6 +29,8 @@ module.exports = {
             revised_No: data.CrossEntry[Part_No - 1].revisionNumber + 1,
           };
 
+          // Update the name field of the existing part
+          data.CrossEntry[Part_No - 1].name = name;
           data.CrossEntry[Part_No - 1].Definition =
             partNumberContent.Definition;
           data.CrossEntry[Part_No - 1].revisionNumber += 1;
@@ -40,6 +45,7 @@ module.exports = {
             revisedBy: partNumberContent.revisedBy,
           };
 
+          // Update slave collection by adding the revision and updating the name
           const result = await partSlave.partNumberCollection.updateOne(
             {
               code_header: header,
@@ -49,6 +55,7 @@ module.exports = {
             },
             {
               $push: { "CrossEntry.$.revisions": revision },
+              $set: { "CrossEntry.$.name": name }, // Update the name field
             }
           );
 
@@ -65,6 +72,7 @@ module.exports = {
           // Adding new CrossEntry
           const newCrossEntry = {
             index: data.CrossEntry.length + 1,
+            name, // Adding the name of the part
             Definition: partNumberContent.Definition,
             revisionNumber: 1,
             revisedBy: partNumberContent.revisedBy,
@@ -90,6 +98,7 @@ module.exports = {
                   revisedBy: partNumberContent.revisedBy,
                 },
               ],
+              name, // Adding the name of the part to the slave entry
             });
 
             await slave.save();
@@ -102,7 +111,7 @@ module.exports = {
           }
         }
       } else {
-        // Creating new entry
+        // Creating new entry if the part number does not exist
         const newEntry = {
           code_header: header,
           code_Commodity: Commodity,
@@ -110,6 +119,7 @@ module.exports = {
           CrossEntry: [
             {
               index: 1,
+              name, // Adding the name field in the new part entry
               Definition: partNumberContent.Definition,
               revisionNumber: 1,
               revisedBy: partNumberContent.revisedBy,
@@ -124,6 +134,7 @@ module.exports = {
           CrossEntry: [
             {
               index: 1,
+              name, // Adding the name field in the new slave entry
               revisions: [
                 {
                   Definition: partNumberContent.Definition,
@@ -135,6 +146,7 @@ module.exports = {
           ],
         };
 
+        // Saving the new entries into both collections
         await partNumberModule.createEmpty(newEntry);
         await partSlave.Addpart(newEntrySlave);
 

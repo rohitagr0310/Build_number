@@ -1,5 +1,5 @@
-const partNumberModule = require("../module/partNumberModule");
-const partSlave = require("../module/partSlave");
+const partNumberModule = require("../../module/inventory/partNumberModule");
+const partSlave = require("../../module/inventory/partSlave");
 
 module.exports = {
   // Add or update a part number

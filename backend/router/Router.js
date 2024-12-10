@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const headercontroller = require("../controller/headercontroller");
-const commodityController = require("../controller/commodityController");
-const subCommodityController = require("../controller/subcommodityController");
-const partNumberController = require("../controller/partNumberController");
+const headercontroller = require("../controller/headers/headercontroller");
+const commodityController = require("../controller/headers/commodityController");
+const subCommodityController = require("../controller/headers/subcommodityController");
+const partNumberController = require("../controller/inventroy/partNumberController");
 
 router.post("/createHeader", headercontroller.addHeader);
 router.post("/createCommodity", commodityController.addcommodity);

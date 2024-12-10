@@ -1,7 +1,7 @@
 const {
   subassemblyCollection,
   createSubassembly,
-} = require("../module/BOMModule"); // Import the subassembly model
+} = require("../../module/inventory/BOMModule"); // Import the subassembly model
 
 // Controller for Subassemblies
 

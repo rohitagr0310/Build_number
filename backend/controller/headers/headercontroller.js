@@ -1,4 +1,4 @@
-const headerModule = require("../module/headerModule");
+const headerModule = require("../../module/headers/headerModule");
 
 module.exports = {
   addHeader: (req, res) => {

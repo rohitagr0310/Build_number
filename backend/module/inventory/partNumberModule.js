@@ -27,6 +27,25 @@ const partNumberSchema = mongoose.Schema({
       Definition: String,
       revisionNumber: Number,
       revisedBy: String,
+      name: {
+        type: String,
+        required: true,
+      },
+      currentStock: {
+        type: Number,
+        required: false,
+        default: 0,
+      },
+      lastIssued: {
+        type: Date,
+        required: false,
+        default: null,
+      },
+      lastRefilled: {
+        type: Date,
+        required: false,
+        default: null,
+      },
     },
   ],
 });
@@ -35,4 +54,13 @@ const partNumberCollection = mongoose.model("part_number", partNumberSchema);
 
 module.exports = {
   partNumberCollection,
+  createEmpty: async (fields) => {
+    try {
+      const partNumber = new partNumberCollection(fields);
+      await partNumber.save();
+      console.log("Part number saved successfully.");
+    } catch (error) {
+      console.error("Error saving part number:", error);
+    }
+  },
 };

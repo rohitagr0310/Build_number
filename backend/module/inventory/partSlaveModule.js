@@ -24,6 +24,10 @@ const partNumberSchema = mongoose.Schema({
   CrossEntry: [
     {
       index: Number,
+      name: {
+        type: String,
+        required: true,
+      },
       revisions: [
         {
           revisionNumber: Number,

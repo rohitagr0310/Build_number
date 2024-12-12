@@ -7,6 +7,7 @@ const appRoutes = require("./router/Router");
 const authRoutes = require("./router/authRouter");
 const cartRoutes = require("./router/cartRouter");
 const BOMRoutes = require("./router/BOMRouter");
+const inventoryRouter = require("./router/inventoryRouter");
 
 const authMiddleware = require("./middleware/auth");
 
@@ -18,9 +19,10 @@ app.use(express.json());
 app.use(cors());
 
 // Protected routes
-app.use("/api", authMiddleware, appRoutes);
+app.use("/api", appRoutes);
 app.use("/api/cart", authMiddleware, cartRoutes);
 app.use("/api/subassemblies", authMiddleware, BOMRoutes);
+app.use("/api/inventory", inventoryRouter);
 app.use("/auth", authRoutes);
 
 // Error handling middleware

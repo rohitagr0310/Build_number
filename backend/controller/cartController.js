@@ -1,4 +1,4 @@
-const cartCollection = require("../module/cart");
+const cartCollection = require("../module/cartModule");
 
 // Get user's cart
 module.exports = {

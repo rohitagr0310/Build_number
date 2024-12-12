@@ -1,5 +1,5 @@
 // const partNumberModule = require('../module/partNumberModule');
-const subcommodityModule = require("../module/subCommodityModule");
+const subcommodityModule = require("../../module/headers/subCommodityModule");
 
 module.exports = {
   addSubCommodity: (req, res) => {

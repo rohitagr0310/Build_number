@@ -1,5 +1,5 @@
-const commodityModule = require("../module/commodityModule");
-const subCommodityModule = require("../module/subCommodityModule");
+const commodityModule = require("../../module/headers/commodityModule");
+const subCommodityModule = require("../../module/headers/subCommodityModule");
 
 module.exports = {
   addcommodity: (req, res) => {

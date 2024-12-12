@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const BOMController = require("../controller/BOMController");
+const BOMController = require("../controller/inventroy/BOMController");
 
 router.post("/create", BOMController.createNewSubassembly);
 router.get("/getall", BOMController.getSubassemblies);

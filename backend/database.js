@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 
-mongoose.connect(
-  "mongodb://Rohit.Agrawal:Rohitagr2610@127.0.0.1:27017/buildNumber?authSource=admin"
-);
+const dbUrl =
+  process.env.NODE_ENV === "production"
+    ? "mongodb://Rohit.Agrawal:Rohitagr2610@127.0.0.1:27017/buildNumber?authSource=admin"
+    : "mongodb://127.0.0.1:27017/buildNumber";
+
+mongoose.connect(dbUrl);
 
 const con = mongoose.connection;
 

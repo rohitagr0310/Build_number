@@ -1,15 +1,10 @@
 import axios from "axios";
-
-const apiUrl = "http://103.159.68.52:8000/api/subassemblies"; // Updated API URL for subassemblies
-
-const getAuthHeaders = () => ({
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
-});
+import { SUBASSEMBLY_ENDPOINTS, getAuthHeaders } from "../config/config";
 
 // Fetch all subassemblies
 export const fetchSubassemblies = async () => {
   try {
-    const response = await axios.get(`${apiUrl}/getall`, {
+    const response = await axios.get(SUBASSEMBLY_ENDPOINTS.GET_ALL, {
       headers: getAuthHeaders(),
     });
     return response.data;
@@ -23,7 +18,7 @@ export const fetchSubassemblies = async () => {
 export const fetchSubassemblyById = async (id) => {
   try {
     const response = await axios.post(
-      `${apiUrl}/get`,
+      SUBASSEMBLY_ENDPOINTS.GET,
       { id },
       {
         headers: getAuthHeaders(),
@@ -39,7 +34,7 @@ export const fetchSubassemblyById = async (id) => {
 // Create a new subassembly
 export const createSubassembly = async (payload) => {
   try {
-    const response = await axios.post(`${apiUrl}/create`, payload, {
+    const response = await axios.post(SUBASSEMBLY_ENDPOINTS.CREATE, payload, {
       headers: {
         "Content-Type": "application/json",
         ...getAuthHeaders(),
@@ -55,7 +50,7 @@ export const createSubassembly = async (payload) => {
 // Update an existing subassembly
 export const updateSubassembly = async (payload) => {
   try {
-    const response = await axios.put(`${apiUrl}/update`, payload, {
+    const response = await axios.put(SUBASSEMBLY_ENDPOINTS.UPDATE, payload, {
       headers: {
         "Content-Type": "application/json",
         ...getAuthHeaders(),
@@ -71,7 +66,7 @@ export const updateSubassembly = async (payload) => {
 // Delete a subassembly
 export const deleteSubassembly = async (id) => {
   try {
-    const response = await axios.delete(`${apiUrl}/delete`, {
+    const response = await axios.delete(SUBASSEMBLY_ENDPOINTS.DELETE, {
       data: { id },
       headers: getAuthHeaders(),
     });

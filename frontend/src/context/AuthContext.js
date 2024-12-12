@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { AUTH_ENDPOINTS } from "../config/config";
 
 const AuthContext = createContext(null);
 
@@ -10,33 +11,30 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Function to check if token is expired
   const isTokenExpired = (token) => {
     try {
       const decoded = jwtDecode(token);
-      return decoded.exp * 1000 < Date.now(); // Check if token expiration time is in the past
+      return decoded.exp * 1000 < Date.now();
     } catch (error) {
-      return true; // If token decoding fails, assume it's invalid
+      return true;
     }
   };
 
   useEffect(() => {
-    // Check token validity on initial load
     if (token) {
       if (isTokenExpired(token)) {
-        logout(); // Logout if token is expired
+        logout();
       } else {
         setIsAuthenticated(true);
       }
     }
-    setLoading(false); // Set loading to false after checking token
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  // Login function
   const login = async (credentials) => {
     try {
-      const response = await fetch("http://103.159.68.52:8000/auth/login", {
+      const response = await fetch(AUTH_ENDPOINTS.LOGIN, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,10 +57,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Signup function
   const signup = async (formData) => {
     try {
-      const response = await fetch("http://103.159.68.52:8000/auth/signup", {
+      const response = await fetch(AUTH_ENDPOINTS.SIGNUP, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +74,6 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Auto-login after successful signup
         const loginResult = await login({
           username: formData.username,
           password: formData.password,
@@ -101,7 +97,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout function
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);

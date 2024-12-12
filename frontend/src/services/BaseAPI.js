@@ -1,14 +1,9 @@
 import axios from "axios";
-
-const apiUrl = "http://103.159.68.52:8000/api/";
-
-const getAuthHeaders = () => ({
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
-});
+import { API_ENDPOINTS, getAuthHeaders } from "../config/config";
 
 export const fetchHeaders = async () => {
   try {
-    const response = await axios.get(`${apiUrl}getheader`, {
+    const response = await axios.get(API_ENDPOINTS.GET_HEADER, {
       headers: getAuthHeaders(),
     });
     return response.data;
@@ -20,7 +15,7 @@ export const fetchHeaders = async () => {
 
 export const fetchCommodities = async () => {
   try {
-    const response = await axios.get(`${apiUrl}getcommodity`, {
+    const response = await axios.get(API_ENDPOINTS.GET_COMMODITY, {
       headers: getAuthHeaders(),
     });
     return response.data;
@@ -33,7 +28,7 @@ export const fetchCommodities = async () => {
 export const fetchSubcommodities = async (commodity) => {
   try {
     const response = await axios.post(
-      `${apiUrl}getsubcommodity`,
+      API_ENDPOINTS.GET_SUBCOMMODITY,
       { code: commodity },
       {
         headers: {
@@ -51,12 +46,16 @@ export const fetchSubcommodities = async (commodity) => {
 
 export const submitPart = async (payload) => {
   try {
-    const response = await axios.post(`${apiUrl}createpartNumber`, payload, {
-      headers: {
-        "Content-Type": "application/json",
-        ...getAuthHeaders(),
-      },
-    });
+    const response = await axios.post(
+      API_ENDPOINTS.CREATE_PART_NUMBER,
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error submitting part:", error);
@@ -66,7 +65,7 @@ export const submitPart = async (payload) => {
 
 export const fetchAllPartNumbers = async () => {
   try {
-    const response = await axios.get(`${apiUrl}getpartNumber`, {
+    const response = await axios.get(API_ENDPOINTS.GET_PART_NUMBER, {
       headers: getAuthHeaders(),
     });
     return response.data;

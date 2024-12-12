@@ -1,41 +1,47 @@
 const headerModule = require("../../module/headers/headerModule");
+const { sendError, sendResponse } = require("../../utils/responseHandler");
+const errorCodes = require("../../utils/errorCodes");
 
 module.exports = {
-  addHeader: (req, res) => {
+  addHeader: async (req, res) => {
     const headerContent = req.body;
-    headerModule.headerCollection
-      .findOne({ code: headerContent.code })
-      .then((prev) => {
-        if (prev) {
-          // headerContent.revisionNumber = prev.revisionNumber + 1;
-          // console.log(headerContent)
-          // console.log(prev);
-          // return headerModule.addHeader(headerContent)
-          // .then((data)=>{
-          //     res.redirect('/')
-          // })
-          res.send({ status: "Already Present" });
-        } else {
-          // headerContent.revisionNumber = 1;
-          return headerModule.addHeader(headerContent).then((data) => {
-            res.send({ status: "Header Added Successfully" });
-          });
-        }
+
+    try {
+      const prev = await headerModule.headerCollection.findOne({
+        code: headerContent.code,
       });
+
+      if (prev) {
+        // If the header already exists, send an error response
+        sendError(res, errorCodes.ALREADY_EXISTS);
+      } else {
+        // Add new header
+        await headerModule.addHeader(headerContent);
+        sendResponse(res, errorCodes.SUCCESS.code, "Header Added Successfully");
+      }
+    } catch (err) {
+      console.error("Error adding header:", err);
+      sendError(res, errorCodes.INTERNAL_SERVER_ERROR, err.message);
+    }
   },
-  getHeaderDetails: (req, res) => {
-    headerModule.headerCollection
-      .find({})
-      .then((headers) => {
-        if (headers && headers.length > 0) {
-          res.send(headers);
-        } else {
-          res.status(404).send({ error: "No Header found" });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching header details:", error);
-        res.status(500).send({ error: "Internal Server Error" });
-      });
+
+  getHeaderDetails: async (req, res) => {
+    try {
+      const headers = await headerModule.headerCollection.find();
+
+      if (headers && headers.length > 0) {
+        sendResponse(
+          res,
+          errorCodes.SUCCESS.code,
+          "Headers fetched successfully",
+          headers
+        );
+      } else {
+        sendError(res, errorCodes.NOT_FOUND);
+      }
+    } catch (error) {
+      console.error("Error fetching header details:", error);
+      sendError(res, errorCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
   },
 };

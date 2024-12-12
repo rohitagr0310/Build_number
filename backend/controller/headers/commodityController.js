@@ -1,59 +1,64 @@
 const commodityModule = require("../../module/headers/commodityModule");
 const subCommodityModule = require("../../module/headers/subCommodityModule");
+const { sendError, sendResponse } = require("../../utils/responseHandler");
+const errorCodes = require("../../utils/errorCodes");
 
 module.exports = {
-  addcommodity: (req, res) => {
+  addcommodity: async (req, res) => {
     const commodityContent = req.body;
-    commodityModule.commodityCollection
-      .findOne({ code: commodityContent.code })
-      .sort({ _id: -1 })
-      .limit(1)
-      .then((prev) => {
-        if (prev) {
-          // commodityContent.revisionNumber = prev.revisionNumber + 1;
-          // return commodityModule.addCommodity(commodityContent)
-          // .then((data)=>{
-          //     res.redirect('/')
-          // })
-          res.send({ status: "Already Present Commodity" });
-        } else {
-          // commodityContent.revisionNumber = 1;
-          return commodityModule
-            .addCommodity(commodityContent)
-            .then((data) => {
-              const field = {
-                subcommodity: commodityContent.code,
-                CrossEntry: [],
-              };
-              subCommodityModule
-                .createEmpty(field)
-                .then(() => {
-                  console.log("subCommodity Created Succesfully");
-                  res.send({ status: "subCommodity Created Succesfully" });
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+
+    try {
+      const prev = await commodityModule.commodityCollection
+        .findOne({ code: commodityContent.code })
+        .sort({ _id: -1 })
+        .limit(1);
+
+      if (prev) {
+        sendError(res, errorCodes.ALREADY_EXISTS);
+      } else {
+        await commodityModule.addCommodity(commodityContent);
+
+        const field = {
+          subcommodity: commodityContent.code,
+          CrossEntry: [],
+        };
+
+        try {
+          await subCommodityModule.createEmpty(field);
+          console.log("subCommodity Created Succesfully");
+          sendResponse(
+            res,
+            errorCodes.SUCCESS.code,
+            "subCommodity Created Successfully"
+          );
+        } catch (err) {
+          console.error("Error creating subCommodity:", err);
+          sendError(res, errorCodes.INTERNAL_SERVER_ERROR, err.message);
         }
-      });
+      }
+    } catch (err) {
+      console.error("Error adding commodity:", err);
+      sendError(res, errorCodes.INTERNAL_SERVER_ERROR, err.message);
+    }
   },
-  getCommodityDetails: (req, res) => {
-    commodityModule.commodityCollection
-      .find()
-      .then((commodities) => {
-        if (commodities && commodities.length > 0) {
-          res.send(commodities);
-        } else {
-          res.status(404).send({ error: "No commodities found" });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching commodity details:", error);
-        res.status(500).send({ error: "Internal Server Error" });
-      });
+
+  getCommodityDetails: async (req, res) => {
+    try {
+      const commodities = await commodityModule.commodityCollection.find();
+
+      if (commodities && commodities.length > 0) {
+        sendResponse(
+          res,
+          errorCodes.SUCCESS.code,
+          "Commodities fetched successfully",
+          commodities
+        );
+      } else {
+        sendError(res, errorCodes.NOT_FOUND);
+      }
+    } catch (error) {
+      console.error("Error fetching commodity details:", error);
+      sendError(res, errorCodes.INTERNAL_SERVER_ERROR, error.message);
+    }
   },
 };

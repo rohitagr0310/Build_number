@@ -1,32 +1,36 @@
-// const partNumberModule = require('../module/partNumberModule');
 const subcommodityModule = require("../../module/headers/subCommodityModule");
+const { sendError, sendResponse } = require("../../utils/responseHandler");
+const errorCodes = require("../../utils/errorCodes");
 
 module.exports = {
-  addSubCommodity: (req, res) => {
+  addSubCommodity: async (req, res) => {
     const subcommodityContent = req.body;
     console.log(subcommodityContent);
-    subcommodityModule.subcommodityCollection
-      .findOne({ subcommodity: subcommodityContent.code })
-      .then((data) => {
-        if (data) {
-          if (data.subcommodity === "F") {
-            const final = {
-              index: 0,
-              Definition: subcommodityContent.Definition,
-              revisedBy: subcommodityContent.revisedBy,
-              revisionDate: new Date(), // Set the current date for revisionDate
-            };
-            data.CrossEntry = [final];
-            return data
-              .save()
-              .then(() =>
-                res.status(200).send("Final Subcommodity is created")
-              );
-          }
 
+    try {
+      const data = await subcommodityModule.subcommodityCollection.findOne({
+        subcommodity: subcommodityContent.code,
+      });
+
+      if (data) {
+        if (data.subcommodity === "F") {
+          const final = {
+            index: 0,
+            Definition: subcommodityContent.Definition,
+            revisedBy: subcommodityContent.revisedBy,
+            revisionDate: new Date(), // Set the current date for revisionDate
+          };
+          data.CrossEntry = [final];
+          await data.save();
+          sendResponse(
+            res,
+            errorCodes.SUCCESS.code,
+            "Final Subcommodity is created"
+          );
+        } else {
           if (data.CrossEntry.length > 100) {
             // Limit reached, do not add more entries
-            res.send({ status: "Maximum limit reached" });
+            sendError(res, errorCodes.MAX_LIMIT_REACHED);
           } else {
             // Adding new CrossEntry
             const CrossEntry = {
@@ -36,39 +40,46 @@ module.exports = {
               revisionDate: new Date(), // Set the current date for revisionDate
             };
             data.CrossEntry.push(CrossEntry);
+            await data.save();
+            sendResponse(
+              res,
+              errorCodes.SUCCESS.code,
+              "CrossEntry updated or added successfully"
+            );
           }
-          return data.save();
-        } else {
-          // Handle case where subcommodity with given code is not found
-          throw new Error("Subcommodity not found");
         }
-      })
-      .then(() => {
-        console.log("CrossEntry updated or added successfully");
-        res
-          .status(200)
-          .send({ status: "CrossEntry updated or added successfully" });
-      })
-      .catch((err) => {
-        console.error("Error:", err.message);
-        res.status(500).send({ status: "Error: " + err.message });
-      });
+      } else {
+        // Handle case where subcommodity with given code is not found
+        sendError(res, errorCodes.NOT_FOUND);
+      }
+    } catch (err) {
+      console.error("Error:", err.message);
+      sendError(res, errorCodes.INTERNAL_SERVER_ERROR, err.message);
+    }
   },
 
-  getSubCommodity: (req, res) => {
+  getSubCommodity: async (req, res) => {
     const subcommodityCode = req.body.code;
-    subcommodityModule.subcommodityCollection
-      .findOne({ subcommodity: subcommodityCode })
-      .then((subcommodity) => {
-        if (subcommodity) {
-          res.send(subcommodity.CrossEntry);
-        } else {
-          res.status(404).send({ error: "Subcommodity not found" });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send({ error: "Internal Server Error" });
-      });
+
+    try {
+      const subcommodity =
+        await subcommodityModule.subcommodityCollection.findOne({
+          subcommodity: subcommodityCode,
+        });
+
+      if (subcommodity) {
+        sendResponse(
+          res,
+          errorCodes.SUCCESS.code,
+          "Subcommodity details fetched successfully",
+          subcommodity.CrossEntry
+        );
+      } else {
+        sendError(res, errorCodes.NOT_FOUND);
+      }
+    } catch (err) {
+      console.error("Error:", err.message);
+      sendError(res, errorCodes.INTERNAL_SERVER_ERROR, err.message);
+    }
   },
 };
